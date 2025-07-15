@@ -1,0 +1,147 @@
+{
+  "company_name": "Tesla",
+  "contact_email": "test@example.com",
+  "research_date": "2025-07-15 20:09:42",
+  "news_research": {
+    "total_articles_found": 9149,
+    "articles_analyzed": 20,
+    "sentiment_summary": {
+      "positive": 7,
+      "negative": 9,
+      "neutral": 4,
+      "total": 20
+    },
+    "key_articles": [
+      {
+        "source": {
+          "id": "the-verge",
+          "name": "The Verge"
+        },
+        "author": "Andrew J. Hawkins",
+        "title": "Tesla\u2019s robotaxis are operating in a regulatory vacuum",
+        "description": "This week, Tesla launched its long-promised robotaxi service in Austin, and almost immediately its vehicles were caught fucking up. In a YouTube video, a Tesla robotaxi briefly drives on the wrong side of the road. Another video shared by Ed Niedermeyer, the \u2026",
+        "url": "https://www.theverge.com/tesla/691975/tesla-robotaxi-mistake-nhtsa-regulatory-weak",
+        "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/gettyimages-2220743970.jpg?quality=90&strip=all&crop=0%2C10.785131724411%2C100%2C78.429736551177&w=1200",
+        "publishedAt": "2025-06-24T17:12:21Z",
+        "content": "The federal government has effectively given up on regulating driverless vehicles. Thats good news for Elon Musk.\r\nThis week, Tesla launched its long-promised robotaxi service in Austin, and almost i\u2026 [+5773 chars]"
+      },
+      {
+        "source": {
+          "id": "the-verge",
+          "name": "The Verge"
+        },
+        "author": "Emma Roth",
+        "title": "Tesla\u2019s first robotaxi rides will have a \u2018safety monitor\u2019 in the passenger seat",
+        "description": "Tesla has begun sending out invitations for its highly anticipated robotaxi service, but there\u2019s one significant caveat: it\u2019s installing a \u201csafety monitor\u201d in the front passenger seat, as previously reported by Electrek. The invites, which were sent to Tesla \u2026",
+        "url": "https://www.theverge.com/news/690245/tesla-robotaxi-rides-launch-safety-monitor-passenger-seat",
+        "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STKE001_STK086_Tesla_Robotaxi_A.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+        "publishedAt": "2025-06-20T13:50:53Z",
+        "content": "Elon Musk previously said Teslas robotaxi service would have no one in the car.\r\nTesla has begun sending out invitations for its highly anticipated robotaxi service, but theres one significant caveat\u2026 [+1582 chars]"
+      },
+      {
+        "source": {
+          "id": "the-verge",
+          "name": "The Verge"
+        },
+        "author": "Andrew J. Hawkins",
+        "title": "Tesla says it delivered its first car autonomously from factory to customer",
+        "description": "This might be a bigger deal than the robotaxis. Tesla said it completed its first fully autonomous vehicle delivery from factory to customer. A video posted on X shows the vehicle \u2014 a Tesla Model Y \u2014 leaving the company\u2019s Austin Gigafactory, driving on the hi\u2026",
+        "url": "https://www.theverge.com/news/694801/tesla-autonomous-delivery-factory-customer-robotaxi",
+        "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK086_TeslaB.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+        "publishedAt": "2025-06-28T13:51:44Z",
+        "content": "The milestone was achieved a day early. But Teslas robotaxis still require safety monitors and remote supervisors.\r\nThis might be a bigger deal than the robotaxis.\r\nTesla said it completed its first \u2026 [+2024 chars]"
+      },
+      {
+        "source": {
+          "id": "wired",
+          "name": "Wired"
+        },
+        "author": "Jeremy White",
+        "title": "Elon Musk Says Grok Is Coming to Tesla EVs",
+        "description": "Get ready for a few hard right turns.",
+        "url": "https://www.wired.com/story/elon-musk-says-grok-is-coming-to-tesla-evs/",
+        "urlToImage": "https://media.wired.com/photos/686fc453919e0eaf669acd27/191:100/w_1280,c_limit/groktopart.png",
+        "publishedAt": "2025-07-10T13:48:42Z",
+        "content": "Grok is coming to Tesla vehicles very soon. Next week at the latest, Elon Musk stated Thursday in a post on X. The EV brand would catch up with the likes of Mercedes-Benz and Volkswagen, which have a\u2026 [+2604 chars]"
+      },
+      {
+        "source": {
+          "id": "the-verge",
+          "name": "The Verge"
+        },
+        "author": "Andrew Hawkins",
+        "title": "Tesla reports 14 percent drop in second-quarter vehicle deliveries",
+        "description": "Tesla sales hit a new low, with the company reporting a 14 percent drop in second-quarter vehicle deliveries compared to a year ago.\u00a0 The company said that it produced a total of 410,244 vehicles between April\u2013June of this year, including 396,835 Model 3 and \u2026",
+        "url": "https://www.theverge.com/news/696473/tesla-q2-2025-sales-report-decrease-elon-musk-robotaxi",
+        "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/257652_Tesla_Takedown_LA_SLueck_0028.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+        "publishedAt": "2025-07-02T13:21:48Z",
+        "content": "Tesla is still struggling to shift its vehicles amid rising competition and backlash against Elon Musk.\r\n\n\nTesla sales hit a new low, with the company reporting a 14 percent drop in second-quarter ve\u2026 [+3416 chars]"
+      }
+    ],
+    "positive_examples": [
+      {
+        "title": "Tesla\u2019s first robotaxi rides will have a \u2018safety monitor\u2019 in the passenger seat",
+        "sentiment": "positive",
+        "url": "https://www.theverge.com/news/690245/tesla-robotaxi-rides-launch-safety-monitor-passenger-seat",
+        "source": "The Verge",
+        "published": "2025-06-20T13:50:53Z",
+        "keywords": [
+          "first"
+        ]
+      },
+      {
+        "title": "Tesla says it delivered its first car autonomously from factory to customer",
+        "sentiment": "positive",
+        "url": "https://www.theverge.com/news/694801/tesla-autonomous-delivery-factory-customer-robotaxi",
+        "source": "The Verge",
+        "published": "2025-06-28T13:51:44Z",
+        "keywords": [
+          "first"
+        ]
+      },
+      {
+        "title": "Tesla's Robotaxi Service Hits the Road in Texas",
+        "sentiment": "positive",
+        "url": "https://www.wired.com/story/tesla-robotaxi-service-launches-austin-texas/",
+        "source": "Wired",
+        "published": "2025-06-22T19:41:03Z",
+        "keywords": [
+          "autonomous"
+        ]
+      }
+    ],
+    "negative_examples": [
+      {
+        "title": "Tesla\u2019s robotaxis are operating in a regulatory vacuum",
+        "sentiment": "negative",
+        "url": "https://www.theverge.com/tesla/691975/tesla-robotaxi-mistake-nhtsa-regulatory-weak",
+        "source": "The Verge",
+        "published": "2025-06-24T17:12:21Z",
+        "keywords": [
+          "wrong"
+        ]
+      },
+      {
+        "title": "Tesla reports 14 percent drop in second-quarter vehicle deliveries",
+        "sentiment": "negative",
+        "url": "https://www.theverge.com/news/696473/tesla-q2-2025-sales-report-decrease-elon-musk-robotaxi",
+        "source": "The Verge",
+        "published": "2025-07-02T13:21:48Z",
+        "keywords": [
+          "drop"
+        ]
+      },
+      {
+        "title": "Elon Musk Is Back at Tesla, but the Magic Might Be Gone",
+        "sentiment": "negative",
+        "url": "https://gizmodo.com/elon-musk-is-back-at-tesla-but-the-magic-might-be-gone-2000622074",
+        "source": "Gizmodo.com",
+        "published": "2025-06-30T15:49:29Z",
+        "keywords": [
+          "crisis"
+        ]
+      }
+    ],
+    "confidence_score": 0.9999999999999999
+  }
+}

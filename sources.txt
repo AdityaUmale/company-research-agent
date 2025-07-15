@@ -1,0 +1,27 @@
+Data Points:
+
+Company overview (history, ownership, founding date)
+Financial snapshot (revenue, funding, key ratios if public, or best‑effort estimates if private)
+Headcount and office locations (highlight HQ)
+Clients or customer segments
+Direct competitors
+Social media research (LinkedIn, Twitter/X, Instagram etc.)
+Recent negative press or controversies (with links)
+Announced future projects, expansions, or hiring plans
+Glassdoor (or similar) ratings and common review themes
+Active job ads across major boards (role, location, posting age)
+
+
+Sources:
+
+Company Overview: Company website (scrape), Wikipedia API
+Financial Snapshot: Yahoo Finance (yfinance Python library), Alpha Vantage API
+Headcount: Company website (scrape “Team” or “About” pages)
+Office Locations: Company website (“Contact” or “Locations” page)
+Clients or Customer Segments: Company website (case studies, testimonials), company blog or press releases
+Direct Competitors: Google Search results (“<company> competitors”) via scraping
+Social Media Research: Twitter/X API (free tier), Instagram Graph API (business accounts only)
+Negative Press or Controversies: NewsAPI (free tier), Google News scraping
+Future Projects / Hiring Plans: Company blog, newsroom, press releases, careers page
+Glassdoor Ratings and Themes: Glassdoor scraping (only if legally permitted; no free API)
+Active Job Ads: Indeed Basic Job Search API (free tier), Google Jobs search (scrape or aggregate)

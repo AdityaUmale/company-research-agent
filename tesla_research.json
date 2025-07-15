@@ -1,9 +1,9 @@
 {
   "company_name": "Tesla",
   "contact_email": "test@example.com",
-  "research_date": "2025-07-15 20:09:42",
+  "research_date": "2025-07-15 21:52:48",
   "news_research": {
-    "total_articles_found": 9149,
+    "total_articles_found": 9217,
     "articles_analyzed": 20,
     "sentiment_summary": {
       "positive": 7,

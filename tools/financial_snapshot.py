@@ -1,4 +1,4 @@
-# tools/financial_snapshot.py
+
 import yfinance as yf
 import requests
 import re

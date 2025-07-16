@@ -1,4 +1,4 @@
-# tools/wikipedia_lookup.py
+
 import wikipedia
 
 def get_company_wikipedia_summary(company_name):

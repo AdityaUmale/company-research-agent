@@ -6,19 +6,32 @@ The Company Research Agent is a Python-based tool that aggregates, analyzes, and
 ## Features
 - Aggregates data from:
   - Company overview (Wikipedia, official site, LinkedIn)
-  ![Alt text](images/Company%20Overview%20Tool%20-%20visual%20selection.png)
-  
+    
+    ![Company Overview Tool](images/Company%20Overview%20Tool%20-%20visual%20selection.png)
   - Financials (public/private, yfinance, Alpha Vantage)
+    
+    ![Financial Snapshot Tool](images/financial%C2%A0snapshot%20tool%20-%20visual%20selection.png)
   - News (NewsAPI, sentiment, controversies, future plans)
+    
+    ![News Tool](images/news%20tool%20-%20visual%20selection.png)
   - Social media (LinkedIn, Twitter, Instagram, YouTube)
+    
+    ![Social Media Research Tool](images/social%20media%20research%20tool%20-%20visual%20selection.png)
   - Competitors (SimilarWeb API)
+    
+    ![Competitor Analysis Tool](images/competitor%20analysis%C2%A0tool%20-%20visual%20selection.png)
   - Customers/clients (web search, Wikipedia, DuckDuckGo)
+    
+    ![Customer Research Tool](images/customer%C2%A0research%C2%A0tool%20-%20visual%20selection.png)
   - Glassdoor reviews (RapidAPI)
+    
+    ![Glassdoor Research Tool](images/Glassdoor%C2%A0research%20tool%20-%20visual%20selection.png)
   - Job listings (multiple job boards, JSearch API)
-- Token-optimized LLM usage (OpenAI GPT-4o)
-- Confidence scoring for each section
-- Markdown and JSON output
-- CLI and modular tool usage
+    
+    ![Job Listing Tool](images/job%C2%A0listing%20tool%20-%20visual%20selection.png)
+
+
+
 
 ## Technical Flow
 1. **Parse CLI Arguments** (company name, email)

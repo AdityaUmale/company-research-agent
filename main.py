@@ -14,10 +14,13 @@ from typing import Dict, List, Any, Optional
 from pydantic import BaseModel, Field
 import asyncio
 from functools import lru_cache
+import pprint
+import difflib
+import wikipedia
 
 from tools.company_overview import research_company_overview
 from tools.financial_snapshot import FinancialSnapshot
-from tools.news import research_company_news
+from tools.news import research_company_news, analyze_news_sentiment, detect_controversies, extract_future_plans, structure_research_data
 from tools.social_media_research import SocialMediaResearcher
 from tools.competitor_analysis import get_competitor_summary
 from tools.customer_research import ClientResearchTool
@@ -258,22 +261,26 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
         """Create report without additional LLM calls"""
         clean_name = self.clean_company_name(company_name)
         filename = f"{clean_name}_report.md"
+        print(f"[DEBUG] Writing report to {filename}")
         
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(f"# {company_name} Company Analysis\n\n")
             f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**Contact Email:** {email}\n")
             f.write(f"**Total Tokens Used:** {self.total_tokens}\n\n")
+            print("[DEBUG] Wrote header and meta info")
             
             # Executive Summary
             f.write("## Executive Summary\n\n")
             f.write(f"{analysis.executive_summary}\n\n")
+            print("[DEBUG] Wrote executive summary")
             
             # Key Insights
             f.write("## Key Insights for Recruiters\n\n")
             for insight in analysis.key_insights:
                 f.write(f"- {insight}\n")
             f.write("\n")
+            print("[DEBUG] Wrote key insights")
             
             # Company Overview
             overview = research_data.get('overview', {})
@@ -314,6 +321,7 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
                 f.write(f"- **Office Locations:** {', '.join(office_locations)}\n")
             else:
                 f.write(f"- **Office Locations:** Not available\n")
+            print("[DEBUG] Wrote company overview")
             
             # Financial Snapshot
             financials = research_data.get('financials', {})
@@ -337,41 +345,47 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
                 f.write(f"- **Employees:** {financial_data.get('employees', 'N/A')}\n")
                 f.write(f"- **Sector:** {financial_data.get('sector', 'N/A')}\n")
                 f.write(f"- **Industry:** {financial_data.get('industry', 'N/A')}\n\n")
+            print("[DEBUG] Wrote financial snapshot")
             
             # News Analysis
             news_analysis = research_data.get('news_analysis')
-            news_data = research_data.get('news', {}).get('data', {})
-            if news_analysis:
+            news_data = research_data.get('news', {}).get('data', {}).get('news_research', {})
+            print(f"[DEBUG] News data for report: {news_data}")
+            if news_analysis or news_data:
                 f.write(f"## Recent News & Sentiment Analysis\n")
-                f.write(f"**Sentiment Score:** {news_analysis.get('sentiment_score')}\n")
-                f.write(f"**Controversy Level:** {news_analysis.get('controversy_level')}\n\n")
-                
-                f.write("### Key Themes\n")
-                for theme in news_analysis.get('key_themes', []):
-                    f.write(f"- {theme}\n")
-                f.write("\n")
-                
-                f.write("### Recruiter Concerns\n")
-                for concern in news_analysis.get('recruiter_concerns', []):
-                    f.write(f"- {concern}\n")
-                f.write("\n")
-
-                # Add positive, negative, and future plans news
-                if news_data.get('recent_positive_news'):
-                    f.write("### Recent Positive News\n")
-                    for item in news_data['recent_positive_news']:
-                        f.write(f"- {item}\n")
+                if news_analysis:
+                    f.write(f"**Sentiment Score:** {news_analysis.get('sentiment_score', 'N/A')}\n")
+                    f.write(f"**Controversy Level:** {news_analysis.get('controversy_level', 'N/A')}\n\n")
+                    f.write("### Key Themes\n")
+                    for theme in news_analysis.get('key_themes', []):
+                        f.write(f"- {theme}\n")
                     f.write("\n")
-                if news_data.get('recent_negative_news'):
+                    f.write("### Recruiter Concerns\n")
+                    for concern in news_analysis.get('recruiter_concerns', []):
+                        f.write(f"- {concern}\n")
+                    f.write("\n")
+                # Add positive, negative, future plans, controversies from news_data
+                if news_data.get('positive_examples'):
+                    f.write("### Recent Positive News\n")
+                    for item in news_data['positive_examples']:
+                        f.write(f"- {item.get('title', '')}\n")
+                    f.write("\n")
+                if news_data.get('negative_examples'):
                     f.write("### Recent Negative News\n")
-                    for item in news_data['recent_negative_news']:
-                        f.write(f"- {item}\n")
+                    for item in news_data['negative_examples']:
+                        f.write(f"- {item.get('title', '')}\n")
                     f.write("\n")
                 if news_data.get('future_plans'):
                     f.write("### Future Plans / Announcements\n")
                     for item in news_data['future_plans']:
-                        f.write(f"- {item}\n")
+                        f.write(f"- {item.get('title', '')}\n")
                     f.write("\n")
+                if news_data.get('controversies'):
+                    f.write("### Recent Controversies\n")
+                    for item in news_data['controversies']:
+                        f.write(f"- {item.get('title', '')}\n")
+                    f.write("\n")
+            print("[DEBUG] Wrote news analysis")
             
             # Social Media
             social_media = research_data.get('social_media', {})
@@ -464,9 +478,19 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
         # Collect all data first (no LLM calls)
         print("Collecting raw data...")
         
-        overview = research_company_overview(company_name)
+        overview = get_best_overview(company_name)
         financials = FinancialSnapshot().research_company_financials(company_name)
-        news_raw = research_company_news(company_name)
+        
+        # --- NEWS TOOL FULL PIPELINE ---
+        news_data = research_company_news(company_name)
+        if news_data:
+            sentiment = analyze_news_sentiment(news_data)
+            controversies = detect_controversies(news_data)
+            future_plans = extract_future_plans(news_data)
+            news_structured = structure_research_data(company_name, email, news_data, sentiment, controversies, future_plans)
+        else:
+            news_structured = {}
+        
         social_media = SocialMediaResearcher(company_name).research_all_platforms()
         
         company_domain = company_name.lower().replace(" ", "").replace(".", "") + ".com"
@@ -480,19 +504,19 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
         research_data = {
             "overview": {
                 "confidence": self.calculate_confidence_score(json.dumps(overview)),
-                "data": overview
+                "data": overview  # full dict
             },
             "financials": {
                 "confidence": self.calculate_confidence_score(json.dumps(financials)),
-                "data": financials
+                "data": financials  # full dict
             },
             "social_media": {
                 "confidence": self.calculate_confidence_score(json.dumps(social_media)),
-                "data": social_media
+                "data": social_media  # full dict
             },
             "competitors": {
                 "confidence": self.calculate_confidence_score(json.dumps(competitors)),
-                "data": competitors.get('competitors', [])
+                "data": competitors.get('competitors', [])  # full list of dicts
             },
             "customers": {
                 "confidence": self.calculate_confidence_score(json.dumps(dataclass_to_dict(getattr(customers, 'major_clients', [])))),
@@ -500,7 +524,11 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             },
             "job_listings": {
                 "confidence": self.calculate_confidence_score(json.dumps(job_listings)),
-                "data": job_listings
+                "data": job_listings  # full list/dict
+            },
+            "news": {
+                "confidence": self.calculate_confidence_score(json.dumps(news_structured)),
+                "data": news_structured  # structured dict with all fields
             }
         }
         
@@ -508,15 +536,20 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
         print("Making strategic LLM calls...")
         
         # 1. Analyze news (mini model)
-        news_analysis = self.analyze_news_efficiently(news_raw or {})
-        research_data["news_analysis"] = news_analysis.dict()
+        news_analysis = self.analyze_news_efficiently(news_data or {}) # Use news_data directly here
+        research_data["news_analysis"] = news_analysis.model_dump()
         
         # 2. Analyze Glassdoor (mini model)
         glassdoor_analysis = self.analyze_glassdoor_efficiently(glassdoor_raw.get('reviews', []))
-        research_data["glassdoor_analysis"] = glassdoor_analysis.dict()
+        research_data["glassdoor_analysis"] = glassdoor_analysis.model_dump()
         
         # 3. Final comprehensive analysis (premium model)
         final_analysis = self.generate_final_analysis(company_name, research_data)
+        
+        # Debug print of research_data before report generation
+        print("\n===== DEBUG: research_data before report generation =====")
+        pprint.pprint(research_data)
+        print("===== END DEBUG =====\n")
         
         # Generate report (no LLM calls)
         print("Generating report...")
@@ -527,11 +560,49 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
         with open(json_filename, 'w', encoding='utf-8') as f:
             json.dump({
                 "research_data": research_data,
-                "final_analysis": final_analysis.dict(),
+                "final_analysis": final_analysis.model_dump(),
                 "token_usage": self.total_tokens
             }, f, indent=2, ensure_ascii=False, default=str)
         
         return filename, json_filename
+
+def get_best_overview(company_name):
+    # Generate candidate names
+    candidates = [
+        company_name,
+        company_name.capitalize(),
+        company_name.title(),
+        company_name + ", Inc.",
+        company_name.capitalize() + ", Inc.",
+        company_name.title() + ", Inc.",
+        company_name + " Inc.",
+        company_name.capitalize() + " Inc.",
+        company_name.title() + " Inc.",
+    ]
+    # Special case for Google
+    if company_name.lower() == "google":
+        candidates.append("Alphabet Inc.")
+    # Remove duplicates and empty
+    candidates = [c for i, c in enumerate(candidates) if c and c not in candidates[:i]]
+    # Try direct matches
+    for name in candidates:
+        overview = research_company_overview(name)
+        if overview.get("founded") or overview.get("history") or overview.get("founders"):
+            print(f"[DEBUG] Overview found for: {name}")
+            return overview
+    # Fuzzy match using Wikipedia search
+    try:
+        search_results = wikipedia.search(company_name)
+        close_matches = difflib.get_close_matches(company_name, search_results, n=3, cutoff=0.6)
+        for match in close_matches:
+            overview = research_company_overview(match)
+            if overview.get("founded") or overview.get("history") or overview.get("founders"):
+                print(f"[DEBUG] Overview found for fuzzy match: {match}")
+                return overview
+    except Exception as e:
+        print(f"[DEBUG] Wikipedia fuzzy search error: {e}")
+    print("[DEBUG] No detailed overview found, using last attempt.")
+    return research_company_overview(company_name)  # Return last attempt even if empty
 
 def main():
     load_dotenv()

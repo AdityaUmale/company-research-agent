@@ -1,16 +1,21 @@
 {
   "research_data": {
     "overview": {
-      "confidence": 0.45,
+      "confidence": 0.55,
       "data": {
-        "name": "google",
+        "name": "google, Inc.",
         "description": "Link to Youtube Video(visible only when JS is disabled) Explore our products and features across Search, Google Workspace and more Learn all about our leading AI models â and discover their capabilities",
-        "founded": null,
+        "founded": "1998",
         "founders": null,
         "ownership": null,
         "headquarters": null,
-        "history": null,
-        "employee_count": 312282,
+        "history": [
+          {
+            "year": "1998",
+            "event": ", by American computer scientists Larry Page and Sergey Brin"
+          }
+        ],
+        "employee_count": null,
         "office_locations": [],
         "sources": [
           {
@@ -19,12 +24,12 @@
             "url": "https://www.google.com/intl/en/about.html"
           },
           {
-            "type": "LinkedIn",
-            "title": "Company Page",
-            "url": "https://www.linkedin.com/company/google"
+            "type": "Wikipedia",
+            "title": "Google",
+            "url": "https://en.wikipedia.org/wiki/Google"
           }
         ],
-        "confidence_score": 0.47
+        "confidence_score": 0.84
       }
     },
     "financials": {
@@ -37,7 +42,7 @@
           "ticker": "GOOGL",
           "exchange": "NMS",
           "currency": "USD",
-          "market_cap": 2234537476096,
+          "market_cap": 2225046552576,
           "enterprise_value": 2071721017344,
           "revenue_ttm": 359713013760,
           "revenue_growth": 0.12,
@@ -45,8 +50,8 @@
           "operating_income": 132601004032,
           "net_income": 110995996672,
           "eps": 8.95,
-          "pe_ratio": 20.518995,
-          "price_to_book": 6.4652348,
+          "pe_ratio": 20.431845,
+          "price_to_book": 6.437775,
           "debt_to_equity": 8.254,
           "current_ratio": 1.768,
           "roa": 0.16896999,
@@ -57,7 +62,7 @@
           "beta": 1.014,
           "fifty_two_week_high": 207.05,
           "fifty_two_week_low": 140.53,
-          "current_price": 183.645,
+          "current_price": 182.865,
           "target_price": 201.4698,
           "recommendation": 1.55882,
           "shares_outstanding": 5820000256,
@@ -65,15 +70,15 @@
           "employees": 185719,
           "sector": "Communication Services",
           "industry": "Internet Content & Information",
-          "last_updated": "2025-07-17 00:32:30",
-          "price_change_52w": 30.680281790365054,
+          "last_updated": "2025-07-17 01:29:16",
+          "price_change_52w": 30.125240162242946,
           "market_cap_formatted": "$2.23T",
           "enterprise_value_formatted": "$2.07T",
           "revenue_ttm_formatted": "$359.71B",
           "gross_profit_formatted": "$210.76B",
           "operating_income_formatted": "$132.60B",
           "net_income_formatted": "$111.00B",
-          "current_price_formatted": "$183.65",
+          "current_price_formatted": "$182.87",
           "target_price_formatted": "$201.47",
           "fifty_two_week_high_formatted": "$207.05",
           "fifty_two_week_low_formatted": "$140.53",
@@ -95,8 +100,8 @@
       "data": {
         "linkedin": {
           "url": "https://www.linkedin.com/company/google",
-          "followers": "37,977,279 followers",
-          "employees": "312,296 employees",
+          "followers": "37,978,160 followers",
+          "employees": "312,282 employees",
           "description": null,
           "industry": null,
           "found": true
@@ -304,11 +309,11 @@
           "job_type": "Contractor"
         },
         {
-          "title": "Test, Training, and Exercise Program Lead",
-          "location": "Baltimore",
+          "title": "C&I Relationship Manager III",
+          "location": "Dunn Loring",
           "source": "JSearchAPI",
-          "company": "Teracore",
-          "url": "https://www.theladders.com/job/test-training-and-exercise-program-lead-teracore-baltimore-md_77722447?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "company": "EagleBank",
+          "url": "https://www.theladders.com/job/c-i-relationship-manager-iii-eaglebancorp-dunn-loring-va_80111345?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
           "job_type": "Full-time"
         },
         {
@@ -320,14 +325,203 @@
           "job_type": "Full-time and Part-time"
         },
         {
-          "title": "C&I Relationship Manager III",
-          "location": "Dunn Loring",
+          "title": "Test, Training, and Exercise Program Lead",
+          "location": "Baltimore",
           "source": "JSearchAPI",
-          "company": "EagleBank",
-          "url": "https://www.theladders.com/job/c-i-relationship-manager-iii-eaglebancorp-dunn-loring-va_80111345?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "company": "Teracore",
+          "url": "https://www.theladders.com/job/test-training-and-exercise-program-lead-teracore-baltimore-md_77722447?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
           "job_type": "Full-time"
         }
       ]
+    },
+    "news": {
+      "confidence": 1.0,
+      "data": {
+        "company_name": "google",
+        "contact_email": "your_email@example.com",
+        "research_date": "2025-07-17 01:29:16",
+        "news_research": {
+          "total_articles_found": 20577,
+          "articles_analyzed": 20,
+          "sentiment_summary": {
+            "positive": 11,
+            "negative": 4,
+            "neutral": 5,
+            "total": 20
+          },
+          "key_articles": [
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Jess Weatherbed",
+              "title": "Google Photos sees several app improvements",
+              "description": "The Google Photos app has been updated to make it easier to navigate your gallery and view image information. Google says the photo view — the screen that appears when you open an image in Google Photos — has been redesigned to provide a “simpler, more modern…",
+              "url": "https://www.theverge.com/news/696480/google-photos-sees-several-app-improvements",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/07/Google-Photos-UI-improvements-July-2025.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+              "publishedAt": "2025-07-02T11:43:37Z",
+              "content": "Several actions have been shuffled to new menus, and images will clearly display where and when they were taken.\r\n\n\nThe Google Photos app has been updated to make it easier to navigate your gallery a… [+1695 chars]"
+            },
+            {
+              "source": {
+                "id": "wired",
+                "name": "Wired"
+              },
+              "author": "Boone Ashworth",
+              "title": "Google Wants to Get Better at Spotting Wildfires From Space",
+              "description": "A partnership with the nonprofit Earth Fire Alliance and satellite manufacturer Muon Space is giving Google a better shot at tracking wildfires—and using AI to process all the data being collected.",
+              "url": "https://www.wired.com/story/google-earth-fire-alliance-spotting-wildfires-from-space/",
+              "urlToImage": "https://media.wired.com/photos/685063d9806539b4180fa570/191:100/w_1280,c_limit/Transporter%2013%20Manifest%20SpaceX.jpg",
+              "publishedAt": "2025-06-24T09:30:00Z",
+              "content": "With fire in particular, times are compressed so much that you have to apply technology to make a decision within the timeframe that you can impact the outcome of what's happening, Collins says.\r\nKry… [+3010 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Emma Roth",
+              "title": "Google tests real-time AI voice chats in Search",
+              "description": "Google is building Search Live into AI Mode, allowing you to have a back-and-forth voice conversation with the company’s AI chatbot right from its search engine. The test, which is rolling out now to Labs users in the US, currently doesn’t support camera-shar…",
+              "url": "https://www.theverge.com/news/689212/google-search-live-ai-mode-test",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/google-search-live-in-search.png?quality=90&strip=all&crop=0%2C12.001349435904%2C100%2C75.997301128191&w=1200",
+              "publishedAt": "2025-06-18T15:48:03Z",
+              "content": "Search Live is coming to AI Mode but youll only be able to interact with it using your voice for now.\r\nGoogle is building Search Live into AI Mode, allowing you to have a back-and-forth voice convers… [+2072 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Emma Roth",
+              "title": "Google DeepMind’s optimized AI model runs directly on robots",
+              "description": "Google DeepMind is rolling out an on-device version of its Gemini Robotics AI model that allows it to operate without an internet connection. The vision-language-action model (VLA) comes with dexterous capabilities similar to the one released in March, but Go…",
+              "url": "https://www.theverge.com/news/691882/google-deepmind-on-device-ai-robots-gemini",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/apptronik-robot.png?quality=90&strip=all&crop=4.1221590650732%2C11.41427083965%2C95.877840934927%2C46.51984126678&w=1200",
+              "publishedAt": "2025-06-24T13:47:28Z",
+              "content": "One of Apptronik’s robots running the on-device model puts a Rubik’s Cube in a bag.\r\n\n\nGoogle DeepMind is rolling out an on-device version of its Gemini Robotics AI model that allows it to operate wi… [+1875 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Andrew Liszewski",
+              "title": "Google Calendar now has an Apple Watch app",
+              "description": "After retreating from watchOS several years ago, Google now only offers a handful of apps for the Apple Watch. That list is expanding to four in total with the launch of a new Google Calendar app rolling out alongside the existing iPhone version, as spotted b…",
+              "url": "https://www.theverge.com/news/695165/google-calendar-apple-watch-app-watchos",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/apple_watch_calendar.jpg?quality=90&strip=all&crop=0%2C10.761878344486%2C100%2C78.476243311027&w=1200",
+              "publishedAt": "2025-06-30T16:53:12Z",
+              "content": "Google’s watchOS Calendar app isn’t as robust as the Apple Watch’s native one. | Image: Apple\r\n\n\nAfter retreating from watchOS several years ago, Google now only offers a handful of apps for the Appl… [+1438 chars]"
+            }
+          ],
+          "positive_examples": [
+            {
+              "title": "Google Photos sees several app improvements",
+              "sentiment": "positive",
+              "url": "https://www.theverge.com/news/696480/google-photos-sees-several-app-improvements",
+              "source": "The Verge",
+              "published": "2025-07-02T11:43:37Z",
+              "keywords": [
+                "improve"
+              ]
+            },
+            {
+              "title": "Google Wants to Get Better at Spotting Wildfires From Space",
+              "sentiment": "positive",
+              "url": "https://www.wired.com/story/google-earth-fire-alliance-spotting-wildfires-from-space/",
+              "source": "Wired",
+              "published": "2025-06-24T09:30:00Z",
+              "keywords": [
+                "profit"
+              ]
+            },
+            {
+              "title": "Google Calendar now has an Apple Watch app",
+              "sentiment": "positive",
+              "url": "https://www.theverge.com/news/695165/google-calendar-apple-watch-app-watchos",
+              "source": "The Verge",
+              "published": "2025-06-30T16:53:12Z",
+              "keywords": [
+                "launch"
+              ]
+            }
+          ],
+          "negative_examples": [
+            {
+              "title": "Google tests real-time AI voice chats in Search",
+              "sentiment": "negative",
+              "url": "https://www.theverge.com/news/689212/google-search-live-ai-mode-test",
+              "source": "The Verge",
+              "published": "2025-06-18T15:48:03Z",
+              "keywords": [
+                "low"
+              ]
+            },
+            {
+              "title": "Google DeepMind’s optimized AI model runs directly on robots",
+              "sentiment": "negative",
+              "url": "https://www.theverge.com/news/691882/google-deepmind-on-device-ai-robots-gemini",
+              "source": "The Verge",
+              "published": "2025-06-24T13:47:28Z",
+              "keywords": [
+                "low"
+              ]
+            },
+            {
+              "title": "Here are the letters that convinced Google and Apple to keep TikTok online",
+              "sentiment": "negative",
+              "url": "https://www.theverge.com/tiktok/697982/trump-tiktok-ban-apple-google-letters-pam-bondi",
+              "source": "The Verge",
+              "published": "2025-07-03T21:26:55Z",
+              "keywords": [
+                "concern"
+              ]
+            }
+          ],
+          "controversies": [],
+          "future_plans": [
+            {
+              "title": "Google Maps is now available on Garmin’s smartwatches",
+              "url": "https://www.theverge.com/news/700892/garmin-smartwatches-google-maps-venu-forerunner-vivoactive-fenix",
+              "source": "The Verge",
+              "published": "2025-07-08T16:54:04Z",
+              "keywords": [
+                "announced"
+              ]
+            },
+            {
+              "title": "Google exec: ‘We’re going to be combining ChromeOS and Android’",
+              "url": "https://www.theverge.com/news/706558/google-android-chromeos-combining-sameer-samat",
+              "source": "The Verge",
+              "published": "2025-07-14T09:34:55Z",
+              "keywords": [
+                "plans to"
+              ]
+            },
+            {
+              "title": "Android’s Circle to Search feature gets AI and gaming upgrades",
+              "url": "https://www.theverge.com/news/702291/android-google-ai-mode-circle-to-search-update",
+              "source": "The Verge",
+              "published": "2025-07-09T13:51:06Z",
+              "keywords": [
+                "announced"
+              ]
+            },
+            {
+              "title": "Chromebook Plus laptops like Lenovo’s sleek, new 14-incher are getting free Gemini AI features",
+              "url": "https://www.theverge.com/news/690885/google-chromeos-gemini-ai-select-to-search-lenovo-chromebook-plus-14",
+              "source": "The Verge",
+              "published": "2025-06-23T12:59:17Z",
+              "keywords": [
+                "announced"
+              ]
+            }
+          ],
+          "confidence_score": 0.9999999999999999
+        }
+      }
     },
     "news_analysis": {
       "sentiment_score": 0.0,
@@ -355,16 +549,16 @@
     }
   },
   "final_analysis": {
-    "executive_summary": "Google, with a substantial workforce of over 312,000 employees, remains a key player in the tech industry despite some missing foundational data. The company's neutral sentiment on Glassdoor suggests a stable work environment, while the presence of six competitors indicates a competitive market landscape. With ten job listings currently available, Google continues to seek talent, reflecting ongoing growth and recruitment viability.",
+    "executive_summary": "Google, founded in 1998, is a leading technology company with a strong market presence. Despite the lack of specific data on employee count and headquarters location, the company's financial stability is evident with a high confidence score in its revenue data. The neutral sentiment from Glassdoor suggests a balanced work environment, while the presence of six competitors indicates a competitive industry landscape. With 10 job listings currently available, Google presents viable opportunities for recruitment, particularly for candidates seeking growth in a stable and innovative company.",
     "key_insights": [
-      "Google employs a large workforce, indicating significant operational scale and potential for diverse career opportunities.",
-      "The neutral Glassdoor sentiment suggests a stable, if not exceptional, company culture.",
-      "The presence of six competitors highlights a competitive industry, which may drive innovation and growth.",
-      "Ten job listings suggest active recruitment efforts, pointing to growth potential and opportunities for new hires.",
-      "The lack of specific revenue data limits a full assessment of financial stability, but Google's market position suggests underlying strength."
+      "Google's founding in 1998 positions it as a well-established player in the tech industry.",
+      "The high confidence in financial data suggests strong company stability and growth potential.",
+      "Neutral Glassdoor sentiment indicates a balanced workplace culture, which may appeal to a wide range of candidates.",
+      "The presence of six competitors highlights a competitive market, necessitating strategic recruitment to attract top talent.",
+      "With 10 job listings, Google is actively seeking new talent, indicating ongoing growth and expansion opportunities."
     ],
-    "missing_data_assessment": "Critical data missing includes the founding year, headquarters location, and specific revenue figures. This information is essential for assessing the company's historical stability, geographical influence, and financial health.",
-    "confidence_rationale": "The confidence score of 0.45 for the overview reflects the absence of key foundational data, such as the founding year and headquarters location. In contrast, the financials section has a confidence score of 1.0, indicating certainty in the absence of revenue data, which is a notable gap. The neutral news and Glassdoor sentiment provide a balanced view of the company's current standing."
+    "missing_data_assessment": "Critical data missing includes the exact number of employees and the location of the headquarters, which are important for assessing company size and geographical influence. Additionally, specific revenue figures are not available, which could provide more insight into financial health.",
+    "confidence_rationale": "The confidence score of 1.0 for financial data suggests that the available information is highly reliable, likely due to Google's transparent financial reporting. However, the lower confidence score of 0.55 for the overview data indicates uncertainty, possibly due to incomplete or outdated information regarding employee count and headquarters location."
   },
-  "token_usage": 1638
+  "token_usage": 1660
 }

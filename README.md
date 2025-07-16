@@ -132,9 +132,3 @@ python main.py --company "Google" --email "your_email@example.com"
 - **Rate Limits:** Some APIs (NewsAPI, RapidAPI) have daily limits; consider upgrading or rotating keys.
 - **Selenium Issues:** For social media scraping, install ChromeDriver and ensure it matches your Chrome version.
 - **Encoding Issues:** Use UTF-8 encoding for all files and terminal output.
-
-## License
-MIT License
-
----
-*For questions or contributions, please open an issue or pull request on GitHub.* 

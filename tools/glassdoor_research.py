@@ -1,93 +1,77 @@
 import requests
-from bs4 import BeautifulSoup
-import pandas as pd
+import sys
 
+RAPIDAPI_KEY = "da887e29a6mshf393f769af15600p1b62bbjsn1857ffd9b6fc"
+HOST = "real-time-glassdoor-data.p.rapidapi.com"
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    "x-rapidapi-host": HOST,
+    "x-rapidapi-key": RAPIDAPI_KEY
 }
 
-def scrape_simplyhired(company):
-    print("[*] Scraping SimplyHired...")
-    url = f"https://www.simplyhired.com/search?q={company.replace(' ', '+')}"
-    resp = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(resp.text, "html.parser")
-    jobs = []
 
-    for card in soup.select("div.card-content"):
-        title_el = card.select_one("a")
-        loc_el = card.select_one("span.jobposting-location")
-        if title_el and loc_el:
-            title = title_el.get_text(strip=True)
-            location = loc_el.get_text(strip=True)
-            if company.lower() in title.lower():
-                jobs.append({
-                    "title": title,
-                    "location": location,
-                    "source": "SimplyHired"
-                })
+def get_company_id(company_name):
+    """Search for company ID using the company name."""
+    url = f"https://{HOST}/company-search"
+    params = {
+        "query": company_name,
+        "limit": 1,
+        "domain": "www.glassdoor.com"
+    }
+    response = requests.get(url, headers=HEADERS, params=params)
 
-    return jobs
+    if response.status_code == 200:
+        data = response.json().get("data", [])
+        if data:
+            company = data[0]
+            print(f"✅ Found company: {company['name']} (ID: {company['company_id']})")
+            return company['company_id']
+        else:
+            print(f"❌ No results found for '{company_name}'")
+            return None
+    else:
+        print(f"❌ Failed to search company. Status: {response.status_code}")
+        print(response.text)
+        return None
 
-def scrape_remoteok(company):
-    print("[*] Scraping RemoteOK...")
-    url = "https://remoteok.com/remote-jobs"
-    resp = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(resp.text, "html.parser")
-    jobs = []
 
-    for row in soup.select("tr.job"):
-        title_el = row.select_one("h2")
-        company_el = row.select_one("h3")
-        if title_el and company_el:
-            title = title_el.get_text(strip=True)
-            company_name = company_el.get_text(strip=True)
-            if company.lower() in company_name.lower() or company.lower() in title.lower():
-                jobs.append({
-                    "title": title,
-                    "location": "Remote",
-                    "source": "RemoteOK"
-                })
+def get_reviews(company_id, page=1):
+    """Fetch company reviews given its ID."""
+    url = f"https://{HOST}/company-reviews"
+    params = {
+        "company_id": company_id,
+        "page": page,
+        "sort": "POPULAR",
+        "language": "en",
+        "only_current_employees": "false",
+        "extended_rating_data": "false",
+        "domain": "www.glassdoor.com"
+    }
+    response = requests.get(url, headers=HEADERS, params=params)
 
-    return jobs
+    if response.status_code == 200:
+        reviews = response.json().get("data", {}).get("reviews", [])
+        if not reviews:
+            print("⚠️ No reviews found.")
+            return
+        for idx, review in enumerate(reviews, 1):
+            print(f"\n--- Review {idx} ---")
+            print(f"Summary   : {review.get('summary')}")
+            print(f"Rating    : {review.get('rating')}")
+            print(f"Job Title : {review.get('job_title')}")
+            print(f"Pros      : {review.get('pros')}")
+            print(f"Cons      : {review.get('cons')}")
+            print(f"Link      : {review.get('review_link')}")
+    else:
+        print(f"❌ Failed to fetch reviews. Status: {response.status_code}")
+        print(response.text)
 
-def scrape_weworkremotely(company):
-    print("[*] Scraping WeWorkRemotely...")
-    url = "https://weworkremotely.com/remote-jobs"
-    resp = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(resp.text, "html.parser")
-    jobs = []
-
-    for section in soup.select("section.jobs"):
-        for li in section.select("li"):
-            company_el = li.select_one("span.company")
-            title_el = li.select_one("span.title")
-            if company_el and title_el:
-                company_name = company_el.get_text(strip=True)
-                title = title_el.get_text(strip=True)
-                if company.lower() in company_name.lower() or company.lower() in title.lower():
-                    jobs.append({
-                        "title": title,
-                        "location": "Remote",
-                        "source": "WeWorkRemotely"
-                    })
-
-    return jobs
-
-def get_jobs(company):
-    all_jobs = []
-    all_jobs += scrape_simplyhired(company)
-    all_jobs += scrape_remoteok(company)
-    all_jobs += scrape_weworkremotely(company)
-    return pd.DataFrame(all_jobs)
 
 if __name__ == "__main__":
-    import sys
-    company_input = sys.argv[1] if len(sys.argv) > 1 else input("Enter company name: ")
+    if len(sys.argv) < 2:
+        print("Usage: python glassdoor_research.py <company_name>")
+        sys.exit(1)
 
-    df = get_jobs(company_input)
-    if df.empty:
-        print("No jobs found.")
-    else:
-        print(df)
-        df.to_csv(f"{company_input}_jobs.csv", index=False)
-        print(f"\nSaved to {company_input}_jobs.csv")
+    company_name = sys.argv[1]
+    company_id = get_company_id(company_name)
+    if company_id:
+        get_reviews(company_id)

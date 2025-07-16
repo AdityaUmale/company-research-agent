@@ -66,6 +66,39 @@ def get_reviews(company_id, page=1):
         print(response.text)
 
 
+def get_glassdoor_summary(company_name, max_reviews=5):
+    """Return a structured summary of Glassdoor reviews for a company."""
+    company_id = get_company_id(company_name)
+    if not company_id:
+        return {"reviews": [], "error": f"No Glassdoor company found for '{company_name}'"}
+    url = f"https://{HOST}/company-reviews"
+    params = {
+        "company_id": company_id,
+        "page": 1,
+        "sort": "POPULAR",
+        "language": "en",
+        "only_current_employees": "false",
+        "extended_rating_data": "false",
+        "domain": "www.glassdoor.com"
+    }
+    response = requests.get(url, headers=HEADERS, params=params)
+    if response.status_code == 200:
+        reviews = response.json().get("data", {}).get("reviews", [])
+        summary = []
+        for review in reviews[:max_reviews]:
+            summary.append({
+                "summary": review.get("summary"),
+                "rating": review.get("rating"),
+                "job_title": review.get("job_title"),
+                "pros": review.get("pros"),
+                "cons": review.get("cons"),
+                "link": review.get("review_link")
+            })
+        return {"reviews": summary, "company_id": company_id}
+    else:
+        return {"reviews": [], "error": f"Failed to fetch reviews. Status: {response.status_code}"}
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python glassdoor_research.py <company_name>")

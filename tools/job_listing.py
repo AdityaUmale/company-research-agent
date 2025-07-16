@@ -115,6 +115,16 @@ def scrape_jsearch(company, api_key):
     return jobs
 
 
+def get_job_listings(company):
+    """Return a structured list of job postings for a company."""
+    jobs = []
+    jobs += scrape_simplyhired(company)
+    jobs += scrape_remoteok(company)
+    jobs += scrape_weworkremotely(company)
+    jobs += scrape_jsearch(company, RAPIDAPI_KEY)
+    return jobs
+
+
 def get_jobs(company):
     all_jobs = []
     all_jobs += scrape_simplyhired(company)

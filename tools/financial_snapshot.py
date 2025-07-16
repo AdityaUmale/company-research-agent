@@ -469,16 +469,9 @@ def display_financial_snapshot(financial_data: Dict[str, Any]):
 if __name__ == "__main__":
     # You can get a free Alpha Vantage API key from: https://www.alphavantage.co/support/#api-key
     # For testing, you can leave it as None to use only yfinance
+    company = input("Enter company name: ").strip()
     financial_researcher = FinancialSnapshot(alpha_vantage_key=None)
+    data = financial_researcher.research_company_financials(company)
+    display_financial_snapshot(data)
+
     
-    # Test with a public company
-    print("Testing with Tesla (Public Company):")
-    tesla_data = financial_researcher.research_company_financials("Tesla, Inc.")
-    display_financial_snapshot(tesla_data)
-    
-    print("\n" + "="*80 + "\n")
-    
-    # Test with a private company
-    print("Testing with a Private Company:")
-    private_data = financial_researcher.research_company_financials("SpaceX")
-    display_financial_snapshot(private_data)

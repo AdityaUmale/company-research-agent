@@ -1,110 +1,568 @@
 import argparse
 import json
 import os
+from datetime import datetime
 from langchain_openai import ChatOpenAI
-from langchain.agents import create_react_agent, AgentExecutor
 from langchain.prompts import PromptTemplate
-from langchain.tools import Tool
+from langchain.output_parsers import PydanticOutputParser
+from langchain.schema import HumanMessage, SystemMessage
+from langchain.callbacks import get_openai_callback
 from dotenv import load_dotenv
 import re
+from dataclasses import asdict, is_dataclass
+from typing import Dict, List, Any, Optional
+from pydantic import BaseModel, Field
+import asyncio
+from functools import lru_cache
 
 from tools.company_overview import research_company_overview
 from tools.financial_snapshot import FinancialSnapshot
-from tools.news import research_company_news, analyze_news_sentiment, structure_research_data, detect_controversies, extract_future_plans
+from tools.news import research_company_news
 from tools.social_media_research import SocialMediaResearcher
 from tools.competitor_analysis import get_competitor_summary
 from tools.customer_research import ClientResearchTool
 from tools.glassdoor_research import get_glassdoor_summary
 from tools.job_listing import get_job_listings
 
+def dataclass_to_dict(obj: Any) -> Any:
+    """Recursively converts dataclass instances (and lists/dicts of them) to dicts."""
+    if is_dataclass(obj):
+        return {field: dataclass_to_dict(getattr(obj, field)) for field in obj.__dataclass_fields__}
+    elif isinstance(obj, dict):
+        return {k: dataclass_to_dict(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [dataclass_to_dict(item) for item in obj]
+    else:
+        return obj
+
+def summarize_list(data: List[Dict]) -> List[Dict]:
+    """Summarizes a list of dictionaries by taking the first non-null value for each key."""
+    if not data:
+        return []
+    summary = []
+    for item in data:
+        if not isinstance(item, dict):
+            summary.append(item)
+            continue
+        summary_item = {}
+        for key in item:
+            if item[key] is not None and item[key] != "":
+                summary_item[key] = item[key]
+        summary.append(summary_item)
+    return summary
+
+class CompanyAnalysis(BaseModel):
+    """Structured output for company analysis"""
+    executive_summary: str = Field(description="3-4 sentence executive summary for recruiters")
+    key_insights: List[str] = Field(description="Top 5 key insights for recruiters")
+    missing_data_assessment: str = Field(description="Assessment of what critical data is missing")
+    confidence_rationale: str = Field(description="Why the confidence scores are what they are")
+
+class NewsAnalysis(BaseModel):
+    """Structured output for news analysis"""
+    sentiment_score: float = Field(description="Overall sentiment score -1 to 1")
+    controversy_level: str = Field(description="LOW, MEDIUM, or HIGH")
+    key_themes: List[str] = Field(description="Top 3-5 themes from news")
+    recruiter_concerns: List[str] = Field(description="Specific concerns for recruiters")
+
+class GlassdoorAnalysis(BaseModel):
+    """Structured output for Glassdoor analysis"""
+    overall_sentiment: str = Field(description="POSITIVE, NEUTRAL, or NEGATIVE")
+    top_pros: List[str] = Field(description="Top 3 pros mentioned")
+    top_cons: List[str] = Field(description="Top 3 cons mentioned")
+    recruiter_notes: List[str] = Field(description="Key notes for recruiters")
+
+class TokenOptimizedResearcher:
+    def __init__(self, openai_api_key: str):
+        self.llm_mini = ChatOpenAI(
+            temperature=0, 
+            model="gpt-4o-mini"
+        )
+        self.llm_premium = ChatOpenAI(
+            temperature=0, 
+            model="gpt-4o"
+        )
+        self.total_tokens = 0
+        
+    def clean_company_name(self, company_name: str) -> str:
+        """Clean company name for filename usage"""
+        return re.sub(r'[^\w\s-]', '', company_name).strip().replace(' ', '_')
+
+    @lru_cache(maxsize=128)
+    def calculate_confidence_score(self, data_str: str) -> float:
+        """Cached confidence calculation to avoid repeated processing"""
+        if not data_str or data_str == "null":
+            return 0.0
+        
+        try:
+            data = json.loads(data_str)
+            if isinstance(data, dict):
+                non_empty = sum(1 for v in data.values() if v and v != "Not available" and v != "N/A")
+                return round(non_empty / len(data) if data else 0.0, 2)
+            elif isinstance(data, list):
+                return 0.8 if data else 0.0
+            return 0.6 if data else 0.0
+        except:
+            return 0.3
+
+    def analyze_news_efficiently(self, news_data: Dict) -> NewsAnalysis:
+        """Analyze news data with single optimized LLM call"""
+        if not news_data or not news_data.get('key_articles'):
+            return NewsAnalysis(
+                sentiment_score=0.0,
+                controversy_level="LOW",
+                key_themes=[],
+                recruiter_concerns=[]
+            )
+        
+        # Truncate data to save tokens
+        articles = news_data.get('key_articles', [])[:5]  # Only analyze top 5
+        
+        parser = PydanticOutputParser(pydantic_object=NewsAnalysis)
+        
+        prompt = PromptTemplate(
+            template="""Analyze this news data for recruiting purposes:
+Articles: {articles}
+Positive: {positive}
+Negative: {negative}
+
+{format_instructions}
+
+Focus on: recruitment impact, company reputation, stability concerns.""",
+            input_variables=["articles", "positive", "negative"],
+            partial_variables={"format_instructions": parser.get_format_instructions()}
+        )
+        
+        with get_openai_callback() as cb:
+            response = self.llm_mini.invoke(prompt.format(
+                articles=str(articles)[:1000],  # Truncate to 1000 chars
+                positive=str(news_data.get('recent_positive_news', []))[:500],
+                negative=str(news_data.get('recent_negative_news', []))[:500]
+            ))
+            self.total_tokens += cb.total_tokens
+        
+        try:
+            content = response.content
+            if not isinstance(content, str):
+                content = str(content)
+            return parser.parse(content)
+        except:
+            return NewsAnalysis(
+                sentiment_score=0.0,
+                controversy_level="MEDIUM",
+                key_themes=["Analysis failed"],
+                recruiter_concerns=["Unable to analyze news sentiment"]
+            )
+
+    def analyze_glassdoor_efficiently(self, glassdoor_data: List) -> GlassdoorAnalysis:
+        """Analyze Glassdoor data with single optimized LLM call"""
+        if not glassdoor_data:
+            return GlassdoorAnalysis(
+                overall_sentiment="NEUTRAL",
+                top_pros=[],
+                top_cons=[],
+                recruiter_notes=["No Glassdoor data available"]
+            )
+        
+        # Sample only recent reviews to save tokens
+        sample_reviews = glassdoor_data[:3]
+        
+        parser = PydanticOutputParser(pydantic_object=GlassdoorAnalysis)
+        
+        prompt = PromptTemplate(
+            template="""Analyze these employee reviews for recruiting insights:
+Reviews: {reviews}
+
+{format_instructions}
+
+Focus on: common themes, work culture, management quality, career growth.""",
+            input_variables=["reviews"],
+            partial_variables={"format_instructions": parser.get_format_instructions()}
+        )
+        
+        with get_openai_callback() as cb:
+            response = self.llm_mini.invoke(prompt.format(
+                reviews=str(sample_reviews)[:1500]  # Truncate to save tokens
+            ))
+            self.total_tokens += cb.total_tokens
+        
+        try:
+            content = response.content
+            if not isinstance(content, str):
+                content = str(content)
+            return parser.parse(content)
+        except:
+            return GlassdoorAnalysis(
+                overall_sentiment="NEUTRAL",
+                top_pros=["Unable to analyze"],
+                top_cons=["Unable to analyze"],
+                recruiter_notes=["Glassdoor analysis failed"]
+            )
+
+    def generate_final_analysis(self, company_name: str, all_data: Dict) -> CompanyAnalysis:
+        """Single comprehensive analysis call - use premium model here"""
+        
+        # Create condensed summary of all data
+        condensed_data = {
+            "overview": {
+                "founded": all_data.get('overview', {}).get('data', {}).get('founded', 'N/A'),
+                "employees": all_data.get('overview', {}).get('data', {}).get('employee_count', 'N/A'),
+                "hq": all_data.get('overview', {}).get('data', {}).get('headquarters', 'N/A'),
+                "confidence": all_data.get('overview', {}).get('confidence', 0)
+            },
+            "financials": {
+                "revenue": all_data.get('financials', {}).get('data', {}).get('financial_data', {}).get('estimated_revenue', 'N/A'),
+                "confidence": all_data.get('financials', {}).get('confidence', 0)
+            },
+            "news_sentiment": all_data.get('news_analysis', {}).sentiment_score if hasattr(all_data.get('news_analysis', {}), 'sentiment_score') else 0,
+            "glassdoor_sentiment": all_data.get('glassdoor_analysis', {}).overall_sentiment if hasattr(all_data.get('glassdoor_analysis', {}), 'overall_sentiment') else 'NEUTRAL',
+            "competitors_count": len(all_data.get('competitors', {}).get('data', [])),
+            "job_listings_count": len(all_data.get('job_listings', {}).get('data', []))
+        }
+        
+        parser = PydanticOutputParser(pydantic_object=CompanyAnalysis)
+        
+        prompt = PromptTemplate(
+            template="""As a recruiting analyst, provide final analysis for {company_name}:
+
+Data Summary: {data_summary}
+
+{format_instructions}
+
+Focus on: recruitment viability, company stability, cultural fit, growth potential.""",
+            input_variables=["company_name", "data_summary"],
+            partial_variables={"format_instructions": parser.get_format_instructions()}
+        )
+        
+        with get_openai_callback() as cb:
+            response = self.llm_premium.invoke(prompt.format(
+                company_name=company_name,
+                data_summary=json.dumps(condensed_data, indent=2)
+            ))
+            self.total_tokens += cb.total_tokens
+        
+        try:
+            content = response.content
+            if not isinstance(content, str):
+                content = str(content)
+            return parser.parse(content)
+        except:
+            return CompanyAnalysis(
+                executive_summary=f"Analysis completed for {company_name} with mixed data quality.",
+                key_insights=["Data collection completed", "Mixed confidence levels", "Requires manual review"],
+                missing_data_assessment="Several data points missing or incomplete",
+                confidence_rationale="Limited by data source availability"
+            )
+
+    def create_optimized_report(self, company_name: str, email: str, research_data: Dict, analysis: CompanyAnalysis) -> str:
+        """Create report without additional LLM calls"""
+        clean_name = self.clean_company_name(company_name)
+        filename = f"{clean_name}_report.md"
+        
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(f"# {company_name} Company Analysis\n\n")
+            f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"**Contact Email:** {email}\n")
+            f.write(f"**Total Tokens Used:** {self.total_tokens}\n\n")
+            
+            # Executive Summary
+            f.write("## Executive Summary\n\n")
+            f.write(f"{analysis.executive_summary}\n\n")
+            
+            # Key Insights
+            f.write("## Key Insights for Recruiters\n\n")
+            for insight in analysis.key_insights:
+                f.write(f"- {insight}\n")
+            f.write("\n")
+            
+            # Company Overview
+            overview = research_data.get('overview', {})
+            f.write(f"## Company Overview\n")
+            f.write(f"**Confidence Score:** {overview.get('confidence', 0)}\n\n")
+            
+            overview_data = overview.get('data', {})
+            f.write(f"- **Name:** {company_name}\n")
+            f.write(f"- **Description:** {overview_data.get('description', 'Not available')}\n")
+            f.write(f"- **Founded:** {overview_data.get('founded', 'Not available')}\n")
+            
+            # Founders (list or string)
+            founders = overview_data.get('founders', 'Not available')
+            if isinstance(founders, list):
+                f.write(f"- **Founders:** {', '.join(founders) if founders else 'Not available'}\n")
+            else:
+                f.write(f"- **Founders:** {founders}\n")
+            
+            f.write(f"- **Ownership:** {overview_data.get('ownership', 'Not available')}\n")
+            f.write(f"- **Headquarters:** {overview_data.get('headquarters', 'Not available')}\n")
+            
+            # History (list of dicts)
+            history = overview_data.get('history', [])
+            if isinstance(history, list) and history:
+                f.write(f"- **History:**\n")
+                for event in history:
+                    year = event.get('year', '')
+                    desc = event.get('event', '')
+                    f.write(f"  - {year}: {desc}\n")
+            else:
+                f.write(f"- **History:** Not available\n")
+            
+            f.write(f"- **Employee Count:** {overview_data.get('employee_count', 'Not available')}\n")
+            
+            # Office Locations (list)
+            office_locations = overview_data.get('office_locations', [])
+            if isinstance(office_locations, list) and office_locations:
+                f.write(f"- **Office Locations:** {', '.join(office_locations)}\n")
+            else:
+                f.write(f"- **Office Locations:** Not available\n")
+            
+            # Financial Snapshot
+            financials = research_data.get('financials', {})
+            f.write(f"## Financial Snapshot\n")
+            f.write(f"**Confidence Score:** {financials.get('confidence', 0)}\n\n")
+            
+            financial_data = financials.get('data', {}).get('financial_data', {})
+            if financial_data:
+                f.write(f"- **Company Name:** {financial_data.get('company_name', 'N/A')}\n")
+                f.write(f"- **Ticker:** {financial_data.get('ticker', 'N/A')}\n")
+                f.write(f"- **Exchange:** {financial_data.get('exchange', 'N/A')}\n")
+                f.write(f"- **Currency:** {financial_data.get('currency', 'N/A')}\n")
+                f.write(f"- **Market Cap:** {financial_data.get('market_cap', 'N/A')}\n")
+                f.write(f"- **Enterprise Value:** {financial_data.get('enterprise_value', 'N/A')}\n")
+                f.write(f"- **Revenue (TTM):** {financial_data.get('revenue_ttm', 'N/A')}\n")
+                f.write(f"- **Revenue Growth:** {financial_data.get('revenue_growth', 'N/A')}\n")
+                f.write(f"- **Net Income:** {financial_data.get('net_income', 'N/A')}\n")
+                f.write(f"- **PE Ratio:** {financial_data.get('pe_ratio', 'N/A')}\n")
+                f.write(f"- **Current Ratio:** {financial_data.get('current_ratio', 'N/A')}\n")
+                f.write(f"- **ROE:** {financial_data.get('roe', 'N/A')}\n")
+                f.write(f"- **Employees:** {financial_data.get('employees', 'N/A')}\n")
+                f.write(f"- **Sector:** {financial_data.get('sector', 'N/A')}\n")
+                f.write(f"- **Industry:** {financial_data.get('industry', 'N/A')}\n\n")
+            
+            # News Analysis
+            news_analysis = research_data.get('news_analysis')
+            news_data = research_data.get('news', {}).get('data', {})
+            if news_analysis:
+                f.write(f"## Recent News & Sentiment Analysis\n")
+                f.write(f"**Sentiment Score:** {news_analysis.get('sentiment_score')}\n")
+                f.write(f"**Controversy Level:** {news_analysis.get('controversy_level')}\n\n")
+                
+                f.write("### Key Themes\n")
+                for theme in news_analysis.get('key_themes', []):
+                    f.write(f"- {theme}\n")
+                f.write("\n")
+                
+                f.write("### Recruiter Concerns\n")
+                for concern in news_analysis.get('recruiter_concerns', []):
+                    f.write(f"- {concern}\n")
+                f.write("\n")
+
+                # Add positive, negative, and future plans news
+                if news_data.get('recent_positive_news'):
+                    f.write("### Recent Positive News\n")
+                    for item in news_data['recent_positive_news']:
+                        f.write(f"- {item}\n")
+                    f.write("\n")
+                if news_data.get('recent_negative_news'):
+                    f.write("### Recent Negative News\n")
+                    for item in news_data['recent_negative_news']:
+                        f.write(f"- {item}\n")
+                    f.write("\n")
+                if news_data.get('future_plans'):
+                    f.write("### Future Plans / Announcements\n")
+                    for item in news_data['future_plans']:
+                        f.write(f"- {item}\n")
+                    f.write("\n")
+            
+            # Social Media
+            social_media = research_data.get('social_media', {})
+            f.write(f"## Social Media Research\n")
+            f.write(f"**Confidence Score:** {social_media.get('confidence', 0)}\n\n")
+            
+            social_data = social_media.get('data', {})
+            if social_data.get('linkedin'):
+                linkedin = social_data['linkedin']
+                f.write(f"- **LinkedIn**\n")
+                f.write(f"  - URL: [{linkedin.get('url', 'N/A')}]({linkedin.get('url', '#')})\n")
+                f.write(f"  - Followers: {linkedin.get('followers', 'N/A')}\n")
+                f.write(f"  - Employees: {linkedin.get('employees', 'N/A')}\n")
+            
+            if social_data.get('youtube'):
+                youtube = social_data['youtube']
+                f.write(f"- **YouTube**\n")
+                f.write(f"  - URL: [{youtube.get('url', 'N/A')}]({youtube.get('url', '#')})\n")
+                f.write(f"  - Subscribers: {youtube.get('subscribers', 'N/A')}\n")
+            f.write("\n")
+            
+            # Competitors
+            competitors = research_data.get('competitors', {})
+            f.write(f"## Direct Competitors\n")
+            f.write(f"**Confidence Score:** {competitors.get('confidence', 0)}\n\n")
+            
+            for competitor in competitors.get('data', []):
+                if isinstance(competitor, dict):
+                    f.write(f"- **{competitor.get('name', 'Unknown')}**\n")
+                    f.write(f"  - Domain: {competitor.get('domain', 'N/A')}\n")
+                    f.write(f"  - Employees: {competitor.get('employees', 'N/A')}\n")
+                    f.write(f"  - Revenue: {competitor.get('revenue', 'N/A')}\n")
+                    f.write(f"  - Visits: {competitor.get('visits', 'N/A')}\n")
+                    f.write(f"  - HQ: {competitor.get('hq', 'N/A')}\n")
+                    if competitor.get('icon'):
+                        f.write(f"  - Icon: ![]({competitor.get('icon')})\n")
+            f.write("\n")
+            
+            # Glassdoor Analysis
+            glassdoor_analysis = research_data.get('glassdoor_analysis')
+            if glassdoor_analysis:
+                f.write(f"## Glassdoor Analysis\n")
+                f.write(f"**Overall Sentiment:** {glassdoor_analysis.get('overall_sentiment')}\n\n")
+                
+                f.write("### Top Pros\n")
+                for pro in glassdoor_analysis.get('top_pros', []):
+                    f.write(f"- {pro}\n")
+                f.write("\n")
+                
+                f.write("### Top Cons\n")
+                for con in glassdoor_analysis.get('top_cons', []):
+                    f.write(f"- {con}\n")
+                f.write("\n")
+                
+                f.write("### Recruiter Notes\n")
+                for note in glassdoor_analysis.get('recruiter_notes', []):
+                    f.write(f"- {note}\n")
+                f.write("\n")
+            
+            # Job Listings
+            job_listings = research_data.get('job_listings', {})
+            f.write(f"## Active Job Ads\n")
+            f.write(f"**Confidence Score:** {job_listings.get('confidence', 0)}\n\n")
+            
+            for job in job_listings.get('data', [])[:4]:  # Show top 4
+                if isinstance(job, dict):
+                    f.write(f"- **{job.get('title', 'Unknown Position')}**\n")
+                    f.write(f"  - Location: {job.get('location', 'N/A')}\n")
+                    f.write(f"  - Company: {job.get('company', 'N/A')}\n")
+                    f.write(f"  - Type: {job.get('job_type', 'N/A')}\n")
+                    if job.get('url'):
+                        f.write(f"  - URL: [{job.get('url')}]({job.get('url')})\n")
+            f.write("\n")
+            
+            # Analysis Summary
+            f.write("## Analysis Summary\n\n")
+            f.write(f"**Missing Data Assessment:** {analysis.missing_data_assessment}\n\n")
+            f.write(f"**Confidence Rationale:** {analysis.confidence_rationale}\n\n")
+            
+            f.write("---\n")
+            f.write(f"*Report generated with {self.total_tokens} tokens*\n")
+        
+        return filename
+
+    def run_token_optimized_research(self, company_name: str, email: str):
+        """Run research with minimal token usage"""
+        print(f"Starting token-optimized research for: {company_name}")
+        print(f"Using GPT-4o-mini for analysis, GPT-4o for final synthesis")
+        
+        # Collect all data first (no LLM calls)
+        print("Collecting raw data...")
+        
+        overview = research_company_overview(company_name)
+        financials = FinancialSnapshot().research_company_financials(company_name)
+        news_raw = research_company_news(company_name)
+        social_media = SocialMediaResearcher(company_name).research_all_platforms()
+        
+        company_domain = company_name.lower().replace(" ", "").replace(".", "") + ".com"
+        competitors = get_competitor_summary(company_domain)
+        
+        customers = ClientResearchTool().research_company_clients(company_name)
+        glassdoor_raw = get_glassdoor_summary(company_name)
+        job_listings = get_job_listings(company_name)
+        
+        # Calculate confidence scores (no LLM calls)
+        research_data = {
+            "overview": {
+                "confidence": self.calculate_confidence_score(json.dumps(overview)),
+                "data": overview
+            },
+            "financials": {
+                "confidence": self.calculate_confidence_score(json.dumps(financials)),
+                "data": financials
+            },
+            "social_media": {
+                "confidence": self.calculate_confidence_score(json.dumps(social_media)),
+                "data": social_media
+            },
+            "competitors": {
+                "confidence": self.calculate_confidence_score(json.dumps(competitors)),
+                "data": competitors.get('competitors', [])
+            },
+            "customers": {
+                "confidence": self.calculate_confidence_score(json.dumps(dataclass_to_dict(getattr(customers, 'major_clients', [])))),
+                "data": summarize_list(list(dataclass_to_dict(getattr(customers, 'major_clients', []))))
+            },
+            "job_listings": {
+                "confidence": self.calculate_confidence_score(json.dumps(job_listings)),
+                "data": job_listings
+            }
+        }
+        
+        # Make strategic LLM calls (only 3 total)
+        print("Making strategic LLM calls...")
+        
+        # 1. Analyze news (mini model)
+        news_analysis = self.analyze_news_efficiently(news_raw or {})
+        research_data["news_analysis"] = news_analysis.dict()
+        
+        # 2. Analyze Glassdoor (mini model)
+        glassdoor_analysis = self.analyze_glassdoor_efficiently(glassdoor_raw.get('reviews', []))
+        research_data["glassdoor_analysis"] = glassdoor_analysis.dict()
+        
+        # 3. Final comprehensive analysis (premium model)
+        final_analysis = self.generate_final_analysis(company_name, research_data)
+        
+        # Generate report (no LLM calls)
+        print("Generating report...")
+        filename = self.create_optimized_report(company_name, email, research_data, final_analysis)
+        
+        # Generate JSON
+        json_filename = f"{self.clean_company_name(company_name)}_data.json"
+        with open(json_filename, 'w', encoding='utf-8') as f:
+            json.dump({
+                "research_data": research_data,
+                "final_analysis": final_analysis.dict(),
+                "token_usage": self.total_tokens
+            }, f, indent=2, ensure_ascii=False, default=str)
+        
+        return filename, json_filename
+
 def main():
-    # Load environment variables from .env file
     load_dotenv()
-    # Get OpenAI API key from environment
     openai_api_key = os.getenv("OPENAI_API_KEY")
     if not openai_api_key:
         raise ValueError("OPENAI_API_KEY not found in environment. Please set it in your .env file.")
 
-    parser = argparse.ArgumentParser(description="Company Research Agent")
+    parser = argparse.ArgumentParser(description="Token-Optimized Company Research Agent")
     parser.add_argument("--company", required=True, help="Company name to research")
+    parser.add_argument("--email", required=True, help="Contact email address")
     args = parser.parse_args()
 
-    # The OpenAI key will be picked up from the environment
-    llm = ChatOpenAI(temperature=0, model="gpt-4")
-
-    # Define tools
-    tools = [
-        Tool(
-            name="CompanyOverview",
-            func=research_company_overview,
-            description="Research company overview including description, founded, founders, etc."
-        ),
-        Tool(
-            name="FinancialSnapshot",
-            func=FinancialSnapshot().research_company_financials,
-            description="Get financial snapshot of the company"
-        ),
-        Tool(
-            name="NewsResearch",
-            func=lambda company: (
-                lambda news: structure_research_data(
-                    company,
-                    "",
-                    news,
-                    analyze_news_sentiment(news),
-                    detect_controversies(news),
-                    extract_future_plans(news)
-                )
-            )(research_company_news(company)),
-            description="Research company news and sentiment"
-        ),
-        Tool(
-            name="SocialMediaResearch",
-            func=lambda company: SocialMediaResearcher(company).research_all_platforms(),
-            description="Research social media presence"
-        ),
-        Tool(
-            name="CompetitorAnalysis",
-            func=lambda domain: get_competitor_summary(domain),
-            description="Get a summary of the company's competitors by domain (e.g., example.com)"
-        ),
-        Tool(
-            name="CustomerResearch",
-            func=lambda company: ClientResearchTool().research_company_clients(company),
-            description="Research company clients, customer segments, and target markets using free web resources"
-        ),
-        Tool(
-            name="GlassdoorResearch",
-            func=lambda company: get_glassdoor_summary(company),
-            description="Research company reviews and ratings from Glassdoor"
-        ),
-        Tool(
-            name="JobListing",
-            func=lambda company: get_job_listings(company),
-            description="Get current job listings for the company from multiple sources"
-        )
-    ]
-
-    prompt = PromptTemplate.from_template(
-        "Answer the following questions as best you can. You have access to the following tools:\n\n{tools}\n\nUse the following format:\n\nQuestion: the input question you must answer\nThought: you should always think about what to do\nAction: the action to take, should be one of [{tool_names}]\nAction Input: the input to the action\nObservation: the result of the action\n... (this Thought/Action/Action Input/Observation can repeat N times)\nThought: I now know the final answer\nFinal Answer: the final answer to the original input question\n\nBegin!\n\nQuestion: Research the company {input} and provide a structured JSON report with overview, financials, news, social media, competitors, customer research, glassdoor research, and job listings.\nThought:{agent_scratchpad}"
-    )
-
-    agent = create_react_agent(llm, tools, prompt)
-    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-
-    result = agent_executor.invoke({"input": args.company})
-
-    # Structure the output
-    output = result['output']
-    # Extract the JSON part after 'Final Answer:'
-    match = re.search(r'Final Answer:\s*(\{.*\})', output, re.DOTALL)
-    if match:
-        json_str = match.group(1)
-        structured_result = json.loads(json_str)
-        print(json.dumps(structured_result, indent=2))
-    else:
-        print("Could not find JSON in the output:")
-        print(output)
+    # Initialize token-optimized researcher
+    researcher = TokenOptimizedResearcher(openai_api_key)
+    
+    # Run research
+    try:
+        start_time = datetime.now()
+        md_file, json_file = researcher.run_token_optimized_research(args.company, args.email)
+        end_time = datetime.now()
+        
+        print(f"\n=== Research Complete ===")
+        print(f"Duration: {end_time - start_time}")
+        print(f"Total Tokens Used: {researcher.total_tokens}")
+        print(f"Estimated Cost: ${researcher.total_tokens * 0.00015:.4f}")  # Rough estimate
+        print(f"Report: {os.path.abspath(md_file)}")
+        print(f"Data: {os.path.abspath(json_file)}")
+        
+    except Exception as e:
+        print(f"Error during research: {str(e)}")
+        raise
 
 if __name__ == "__main__":
     main()

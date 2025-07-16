@@ -1,0 +1,370 @@
+{
+  "research_data": {
+    "overview": {
+      "confidence": 0.45,
+      "data": {
+        "name": "google",
+        "description": "Link to Youtube Video(visible only when JS is disabled) Explore our products and features across Search, Google Workspace and more Learn all about our leading AI models â and discover their capabilities",
+        "founded": null,
+        "founders": null,
+        "ownership": null,
+        "headquarters": null,
+        "history": null,
+        "employee_count": 312282,
+        "office_locations": [],
+        "sources": [
+          {
+            "type": "Official Website",
+            "title": "About Page",
+            "url": "https://www.google.com/intl/en/about.html"
+          },
+          {
+            "type": "LinkedIn",
+            "title": "Company Page",
+            "url": "https://www.linkedin.com/company/google"
+          }
+        ],
+        "confidence_score": 0.47
+      }
+    },
+    "financials": {
+      "confidence": 1.0,
+      "data": {
+        "status": "success",
+        "data_type": "public_company",
+        "financial_data": {
+          "company_name": "Alphabet Inc.",
+          "ticker": "GOOGL",
+          "exchange": "NMS",
+          "currency": "USD",
+          "market_cap": 2234537476096,
+          "enterprise_value": 2071721017344,
+          "revenue_ttm": 359713013760,
+          "revenue_growth": 0.12,
+          "gross_profit": 210757992448,
+          "operating_income": 132601004032,
+          "net_income": 110995996672,
+          "eps": 8.95,
+          "pe_ratio": 20.518995,
+          "price_to_book": 6.4652348,
+          "debt_to_equity": 8.254,
+          "current_ratio": 1.768,
+          "roa": 0.16896999,
+          "roe": 0.34789002,
+          "profit_margin": 0.30857,
+          "operating_margin": 0.33918,
+          "dividend_yield": 0.48,
+          "beta": 1.014,
+          "fifty_two_week_high": 207.05,
+          "fifty_two_week_low": 140.53,
+          "current_price": 183.645,
+          "target_price": 201.4698,
+          "recommendation": 1.55882,
+          "shares_outstanding": 5820000256,
+          "float_shares": 10875629700,
+          "employees": 185719,
+          "sector": "Communication Services",
+          "industry": "Internet Content & Information",
+          "last_updated": "2025-07-17 00:32:30",
+          "price_change_52w": 30.680281790365054,
+          "market_cap_formatted": "$2.23T",
+          "enterprise_value_formatted": "$2.07T",
+          "revenue_ttm_formatted": "$359.71B",
+          "gross_profit_formatted": "$210.76B",
+          "operating_income_formatted": "$132.60B",
+          "net_income_formatted": "$111.00B",
+          "current_price_formatted": "$183.65",
+          "target_price_formatted": "$201.47",
+          "fifty_two_week_high_formatted": "$207.05",
+          "fifty_two_week_low_formatted": "$140.53",
+          "shares_outstanding_formatted": "$5.82B",
+          "float_shares_formatted": "$10.88B"
+        },
+        "confidence_score": 0.9,
+        "sources": [
+          {
+            "type": "Yahoo Finance",
+            "url": "https://finance.yahoo.com/quote/GOOGL",
+            "data_points": "Stock price, financial ratios, company info"
+          }
+        ]
+      }
+    },
+    "social_media": {
+      "confidence": 0.57,
+      "data": {
+        "linkedin": {
+          "url": "https://www.linkedin.com/company/google",
+          "followers": "37,977,279 followers",
+          "employees": "312,296 employees",
+          "description": null,
+          "industry": null,
+          "found": true
+        },
+        "twitter": {},
+        "instagram": {},
+        "facebook": {},
+        "youtube": {
+          "url": "https://www.youtube.com/@google",
+          "subscribers": "13.3M",
+          "videos": null,
+          "found": true
+        },
+        "confidence_score": 0.5,
+        "sources": [
+          {
+            "platform": "LinkedIn",
+            "url": "https://www.linkedin.com/company/google",
+            "method": "requests",
+            "status": "success"
+          },
+          {
+            "platform": "YouTube",
+            "url": "https://www.youtube.com/@google",
+            "method": "requests",
+            "status": "success"
+          }
+        ]
+      }
+    },
+    "competitors": {
+      "confidence": 1.0,
+      "data": [
+        {
+          "name": "Facebook",
+          "domain": "facebook.com",
+          "employees_min": 10001,
+          "employees_max": null,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 11589653220.695496,
+          "hq_city": "Menlo Park",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=facebook.com&t=2&s=1&h=be773d6b77aa3d59b6a671c5c27ad729b1ae77400e89776e2f749cce6b926c4b"
+        },
+        {
+          "name": "Chat Gpt",
+          "domain": "chatgpt.com",
+          "employees_min": 51,
+          "employees_max": 200,
+          "revenue_min": null,
+          "revenue_max": null,
+          "total_visits": 5395125236,
+          "hq_city": "N/A",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=chatgpt.com&t=2&s=1&h=a31616ae3cdef12fcfc664127563e6092e7531e7b4c3cde7e0c8c5fd3310dfc0"
+        },
+        {
+          "name": "Bing",
+          "domain": "bing.com",
+          "employees_min": 1001,
+          "employees_max": 5000,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 1363194512.788903,
+          "hq_city": "Redmond",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=bing.com&t=2&s=1&h=a37ae326ae78ba2da30e9c8da030e84e07d4c76c5452c239f85c9050781ffde8"
+        },
+        {
+          "name": "X",
+          "domain": "x.com",
+          "employees_min": 1001,
+          "employees_max": 5000,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 4374656695.505122,
+          "hq_city": "San Francisco",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=x.com&t=2&s=1&h=181f9f2250b958cc0ca20fb16f33049b6e13425f038a279637ce1da9dc20d56f"
+        },
+        {
+          "name": "Instagram",
+          "domain": "instagram.com",
+          "employees_min": 10001,
+          "employees_max": null,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 6326637939.38976,
+          "hq_city": "Menlo Park",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=instagram.com&t=2&s=1&h=acbe9ff09f263f0114ce8473b3d3e401bfdc360d5aff845e04182e8d2335ba49"
+        },
+        {
+          "name": "YouTube",
+          "domain": "youtube.com",
+          "employees_min": 10001,
+          "employees_max": null,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 29173239484.796486,
+          "hq_city": "San Bruno",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=youtube.com&t=2&s=1&h=e117fb09ba0a34dee9830863bf927d29fc864e342583a36a667bf12346e88e20"
+        }
+      ]
+    },
+    "customers": {
+      "confidence": 0.8,
+      "data": [
+        {
+          "name": "The Google Cloud",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: The Google Cloud Users Email List from LogiChannel is a well-segmented database that allows you to c...",
+          "source": "Web search"
+        },
+        {
+          "name": "tant decision-makers looking to",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: The Google Cloud Users Email List from LogiChannel is a well-segmented database that allows you to c...",
+          "source": "Web search"
+        },
+        {
+          "name": "ful computers and tools you can",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: Companies using Google cloud Google Cloud is like a big collection of powerful computers and tools y...",
+          "source": "Web search"
+        },
+        {
+          "name": "work. Businesses and developers",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: Companies using Google cloud Google Cloud is like a big collection of powerful computers and tools y...",
+          "source": "Web search"
+        },
+        {
+          "name": "world. Many prominent companies",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: Google cloud also offers various collaboration tools like Gmail, google chat, google calendar, googl...",
+          "source": "Web search"
+        }
+      ]
+    },
+    "job_listings": {
+      "confidence": 0.8,
+      "data": [
+        {
+          "title": "Sr. Technology Risk Assessor Consultant - Med Devices (BHJOB22048_756)",
+          "location": "Washington",
+          "source": "JSearchAPI",
+          "company": "ITmPowered",
+          "url": "https://www.theladders.com/job/sr-technology-risk-assessor-consultant-med-devices-bhjob22048-756-itmpowered-washington-dc_77312329?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Scrum Master",
+          "location": "Alexandria",
+          "source": "JSearchAPI",
+          "company": "AMERICAN SYSTEMS",
+          "url": "https://www.theladders.com/job/scrum-master-americansystems-alexandria-va_80500524?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "CT Technologist - Outpatient",
+          "location": "Bethesda",
+          "source": "JSearchAPI",
+          "company": "Quadrant, Inc.",
+          "url": "https://www.theladders.com/job/ct-technologist-outpatient-quadrant-inc-bethesda-md_80694384?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Planning Analyst - Customer Service Center",
+          "location": "Leesburg",
+          "source": "JSearchAPI",
+          "company": "Loudoun County Government",
+          "url": "https://www.theladders.com/job/planning-analyst-customer-service-center-loudoun-county-government-leesburg-va_80826362?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Security Analyst/ Documentation SME",
+          "location": "Fairfax",
+          "source": "JSearchAPI",
+          "company": "ECS",
+          "url": "https://www.theladders.com/job/security-analyst-documentation-sme-ecs-fairfax-va_80394995?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Enterprise - Data Engineer - Python, SQL, ETL",
+          "location": "Dunn Loring",
+          "source": "JSearchAPI",
+          "company": "Erias Ventures, LLC",
+          "url": "https://www.theladders.com/job/enterprise-data-engineer-python-sql-etl-eriasventuresllc-dunn-loring-va_80241691?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Business Operations Manager / Contract / Remote",
+          "location": "San Francisco",
+          "source": "JSearchAPI",
+          "company": "Motion Recruitment",
+          "url": "https://motionrecruitment.com/tech-jobs/san-francisco/contract/business-operations-manager-contract-remote/782978?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Contractor"
+        },
+        {
+          "title": "Test, Training, and Exercise Program Lead",
+          "location": "Baltimore",
+          "source": "JSearchAPI",
+          "company": "Teracore",
+          "url": "https://www.theladders.com/job/test-training-and-exercise-program-lead-teracore-baltimore-md_77722447?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Miembro de personal",
+          "location": "Germantown",
+          "source": "JSearchAPI",
+          "company": "CHIPOTLE",
+          "url": "https://jobs-es.chipotle.com/trabajo/germantown/miembro-de-personal/18602/71243885104?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time and Part-time"
+        },
+        {
+          "title": "C&I Relationship Manager III",
+          "location": "Dunn Loring",
+          "source": "JSearchAPI",
+          "company": "EagleBank",
+          "url": "https://www.theladders.com/job/c-i-relationship-manager-iii-eaglebancorp-dunn-loring-va_80111345?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        }
+      ]
+    },
+    "news_analysis": {
+      "sentiment_score": 0.0,
+      "controversy_level": "LOW",
+      "key_themes": [],
+      "recruiter_concerns": []
+    },
+    "glassdoor_analysis": {
+      "overall_sentiment": "NEUTRAL",
+      "top_pros": [
+        "Abundant food options and amenities on campus",
+        "Competitive compensation and benefits",
+        "Opportunity to work with talented and innovative colleagues"
+      ],
+      "top_cons": [
+        "Poor work/life balance",
+        "Illusion of perks that keep employees working longer hours",
+        "Limited actual career growth opportunities despite theoretical potential"
+      ],
+      "recruiter_notes": [
+        "Highlight the extensive benefits and amenities to attract candidates",
+        "Address concerns about work/life balance in recruitment messaging",
+        "Emphasize the opportunity to work with top talent while being transparent about the challenges of career advancement"
+      ]
+    }
+  },
+  "final_analysis": {
+    "executive_summary": "Google, with a substantial workforce of over 312,000 employees, remains a key player in the tech industry despite some missing foundational data. The company's neutral sentiment on Glassdoor suggests a stable work environment, while the presence of six competitors indicates a competitive market landscape. With ten job listings currently available, Google continues to seek talent, reflecting ongoing growth and recruitment viability.",
+    "key_insights": [
+      "Google employs a large workforce, indicating significant operational scale and potential for diverse career opportunities.",
+      "The neutral Glassdoor sentiment suggests a stable, if not exceptional, company culture.",
+      "The presence of six competitors highlights a competitive industry, which may drive innovation and growth.",
+      "Ten job listings suggest active recruitment efforts, pointing to growth potential and opportunities for new hires.",
+      "The lack of specific revenue data limits a full assessment of financial stability, but Google's market position suggests underlying strength."
+    ],
+    "missing_data_assessment": "Critical data missing includes the founding year, headquarters location, and specific revenue figures. This information is essential for assessing the company's historical stability, geographical influence, and financial health.",
+    "confidence_rationale": "The confidence score of 0.45 for the overview reflects the absence of key foundational data, such as the founding year and headquarters location. In contrast, the financials section has a confidence score of 1.0, indicating certainty in the absence of revenue data, which is a notable gap. The neutral news and Glassdoor sentiment provide a balanced view of the company's current standing."
+  },
+  "token_usage": 1638
+}

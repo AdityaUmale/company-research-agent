@@ -58,8 +58,16 @@ def research_company_news(company_name):
 
 def analyze_news_sentiment(articles):
     """Enhanced analysis of news articles"""
-    if not articles or not articles['articles']:
-        return "No articles to analyze"
+    if not articles or not articles.get('articles'):
+        return {
+            'total': 0,
+            'positive': 0,
+            'negative': 0,
+            'neutral': 0,
+            'articles': [],
+            'positive_examples': [],
+            'negative_examples': []
+        }
     
     total_articles = len(articles['articles'])
     

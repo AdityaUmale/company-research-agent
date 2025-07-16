@@ -1,22 +1,32 @@
 import argparse
 import json
+import os
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain.prompts import PromptTemplate
 from langchain.tools import Tool
+from dotenv import load_dotenv
+import re
 
 from tools.company_overview import research_company_overview
 from tools.financial_snapshot import FinancialSnapshot
-from tools.news import research_company_news, analyze_news_sentiment, structure_research_data
+from tools.news import research_company_news, analyze_news_sentiment, structure_research_data, detect_controversies, extract_future_plans
 from tools.social_media_research import SocialMediaResearcher
 
 def main():
+    # Load environment variables from .env file
+    load_dotenv()
+    # Get OpenAI API key from environment
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise ValueError("OPENAI_API_KEY not found in environment. Please set it in your .env file.")
+
     parser = argparse.ArgumentParser(description="Company Research Agent")
     parser.add_argument("--company", required=True, help="Company name to research")
-    parser.add_argument("--openai-api-key", required=True, help="OpenAI API key")
     args = parser.parse_args()
 
-    llm = ChatOpenAI(temperature=0, model="gpt-4", openai_api_key=args.openai_api_key)
+    # The OpenAI key will be picked up from the environment
+    llm = ChatOpenAI(temperature=0, model="gpt-4")
 
     # Define tools
     tools = [
@@ -32,7 +42,16 @@ def main():
         ),
         Tool(
             name="NewsResearch",
-            func=lambda company: structure_research_data(company, "", research_company_news(company), analyze_news_sentiment(research_company_news(company))),
+            func=lambda company: (
+                lambda news: structure_research_data(
+                    company,
+                    "",
+                    news,
+                    analyze_news_sentiment(news),
+                    detect_controversies(news),
+                    extract_future_plans(news)
+                )
+            )(research_company_news(company)),
             description="Research company news and sentiment"
         ),
         Tool(
@@ -52,8 +71,16 @@ def main():
     result = agent_executor.invoke({"input": args.company})
 
     # Structure the output
-    structured_result = json.loads(result['output'])  # Assuming the final answer is JSON
-    print(json.dumps(structured_result, indent=2))
+    output = result['output']
+    # Extract the JSON part after 'Final Answer:'
+    match = re.search(r'Final Answer:\s*(\{.*\})', output, re.DOTALL)
+    if match:
+        json_str = match.group(1)
+        structured_result = json.loads(json_str)
+        print(json.dumps(structured_result, indent=2))
+    else:
+        print("Could not find JSON in the output:")
+        print(output)
 
 if __name__ == "__main__":
     main()

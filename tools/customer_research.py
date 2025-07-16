@@ -488,7 +488,7 @@ class ClientResearchTool:
             research_timestamp=datetime.now().isoformat()
         )
     
-    def export_to_csv(self, result: ResearchResult, filename: str = None):
+    def export_to_csv(self, result: ResearchResult, filename: Optional[str] = None):
         """Export research results to CSV"""
         if filename is None:
             filename = f"{result.company_name}_client_research_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"

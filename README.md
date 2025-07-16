@@ -1,32 +1,33 @@
 # Company Research Agent
 
 ## Overview
+
 The Company Research Agent is a Python-based tool that aggregates, analyzes, and synthesizes data from multiple sources to generate a comprehensive, professional markdown report about any company. It is designed for recruiters, analysts, and business professionals who need a quick, reliable, and detailed company profile.
 
-## Features
-- Aggregates data from:
-  - Company overview (Wikipedia, official site, LinkedIn)
+## Tools Used to gather Info from different sources
+
+  - Company overview tool (Wikipedia, official site, LinkedIn)
     
     ![Company Overview Tool](images/Company%20Overview%20Tool%20-%20visual%20selection.png)
-  - Financials (public/private, yfinance, Alpha Vantage)
+  - Financial tool
     
     ![Financial Snapshot Tool](images/financial%C2%A0snapshot%20tool%20-%20visual%20selection.png)
-  - News (NewsAPI, sentiment, controversies, future plans)
+  - News tool 
     
     ![News Tool](images/news%20tool%20-%20visual%20selection.png)
-  - Social media (LinkedIn, Twitter, Instagram, YouTube)
+  - Social media tool
     
     ![Social Media Research Tool](images/social%20media%20research%20tool%20-%20visual%20selection.png)
-  - Competitors (SimilarWeb API)
+  - Competitors tool
     
     ![Competitor Analysis Tool](images/competitor%20analysis%C2%A0tool%20-%20visual%20selection.png)
-  - Customers/clients (web search, Wikipedia, DuckDuckGo)
+  - Customers/clients tool
     
     ![Customer Research Tool](images/customer%C2%A0research%C2%A0tool%20-%20visual%20selection.png)
-  - Glassdoor reviews (RapidAPI)
+  - Glassdoor reviews tool
     
     ![Glassdoor Research Tool](images/Glassdoor%C2%A0research%20tool%20-%20visual%20selection.png)
-  - Job listings (multiple job boards, JSearch API)
+  - Job listings tool
     
     ![Job Listing Tool](images/job%C2%A0listing%20tool%20-%20visual%20selection.png)
 
@@ -34,6 +35,8 @@ The Company Research Agent is a Python-based tool that aggregates, analyzes, and
 
 
 ## Technical Flow
+
+![Technical Flow of main.py](images/Here%E2%80%99s%20a%C2%A0concise%20technical%C2%A0flow%20of%C2%A0the%20process%C2%A0in%C2%A0main.py_%20-%20visual%20selection.png)
 1. **Parse CLI Arguments** (company name, email)
 2. **Initialize Researcher** (LLM models, config)
 3. **Collect Raw Data** (call each tool: overview, financials, news, social, competitors, customers, glassdoor, jobs)

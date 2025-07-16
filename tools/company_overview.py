@@ -383,34 +383,37 @@ def extract_company_basics(wiki_data):
     }
 
 def extract_company_history(wiki_data):
-    """Extract company history from Wikipedia data"""
+    """Extract company history timeline from Wikipedia data as list of year-event pairs"""
     if not wiki_data or not wiki_data.get('summary'):
-        return None
+        return []
     
     text = wiki_data['summary']
     
-    # Look for history-related sentences
+    # Patterns to extract year-event
+    timeline = []
+    year_pattern = r'(\d{4})[^.]*?\.?\s*([^.]+)'
+    
     sentences = text.split('.')
-    history_sentences = []
+    for sentence in sentences:
+        sentence = sentence.strip()
+        match = re.search(year_pattern, sentence)
+        if match:
+            year = match.group(1)
+            event = match.group(2).strip()
+            if len(event) > 10:
+                timeline.append({'year': year, 'event': event})
     
-    history_keywords = [
-        'history', 'founded', 'established', 'started', 'began',
-        'originally', 'initially', 'first', 'early', 'development'
-    ]
+    # Deduplicate and limit to 5 key events
+    unique_timeline = []
+    seen_years = set()
+    for item in timeline:
+        if item['year'] not in seen_years:
+            unique_timeline.append(item)
+            seen_years.add(item['year'])
+            if len(unique_timeline) >= 5:
+                break
     
-    try:
-        for sentence in sentences:
-            sentence = sentence.strip()
-            if any(keyword in sentence.lower() for keyword in history_keywords):
-                if len(sentence) > 20:  # Meaningful sentences
-                    history_sentences.append(sentence)
-        
-        if history_sentences:
-            return '. '.join(history_sentences[:3]) + '.'
-    except Exception:
-        pass
-    
-    return None
+    return unique_timeline
 
 def research_company_overview(company_name: str) -> dict:
     """

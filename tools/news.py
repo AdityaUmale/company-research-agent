@@ -146,7 +146,63 @@ def analyze_news_sentiment(articles):
         'negative_examples': negative_examples
     }
 
-def structure_research_data(company_name, email, news_data, sentiment_analysis):
+def detect_controversies(articles):
+    """Detect controversies in news articles"""
+    if not articles or not articles['articles']:
+        return []
+    
+    controversy_keywords = ['lawsuit', 'scandal', 'investigation', 'fine', 'penalty', 'controversy', 'criticized', 'accused']
+    
+    controversies = []
+    for article in articles['articles']:
+        title_lower = article['title'].lower()
+        desc_lower = (article['description'] or '').lower()
+        matched_keywords = [kw for kw in controversy_keywords if kw in title_lower or kw in desc_lower]
+        if matched_keywords:
+            controversies.append({
+                'title': article['title'],
+                'url': article['url'],
+                'source': article['source']['name'],
+                'published': article['publishedAt'],
+                'keywords': matched_keywords
+            })
+    
+    print(f"\n⚠️ Detected {len(controversies)} potential controversies")
+    for i, item in enumerate(controversies[:3], 1):
+        print(f"   {i}. {item['title']}")
+        print(f"      Keywords: {', '.join(item['keywords'])}")
+    
+    return controversies
+
+def extract_future_plans(articles):
+    """Extract future plans from news articles"""
+    if not articles or not articles['articles']:
+        return []
+    
+    future_keywords = ['expansion', 'hiring', 'plans to', 'will launch', 'upcoming', 'announced']
+    
+    future_plans = []
+    for article in articles['articles']:
+        title_lower = article['title'].lower()
+        desc_lower = (article['description'] or '').lower()
+        matched_keywords = [kw for kw in future_keywords if kw in title_lower or kw in desc_lower]
+        if matched_keywords:
+            future_plans.append({
+                'title': article['title'],
+                'url': article['url'],
+                'source': article['source']['name'],
+                'published': article['publishedAt'],
+                'keywords': matched_keywords
+            })
+    
+    print(f"\n🔮 Detected {len(future_plans)} future plans/announcements")
+    for i, item in enumerate(future_plans[:3], 1):
+        print(f"   {i}. {item['title']}")
+        print(f"      Keywords: {', '.join(item['keywords'])}")
+    
+    return future_plans
+
+def structure_research_data(company_name, email, news_data, sentiment_analysis, controversies, future_plans):
     """Structure the research data for report generation"""
     return {
         'company_name': company_name,
@@ -164,6 +220,8 @@ def structure_research_data(company_name, email, news_data, sentiment_analysis):
             'key_articles': news_data['articles'][:5],  # Top 5 articles
             'positive_examples': sentiment_analysis['positive_examples'],
             'negative_examples': sentiment_analysis['negative_examples'],
+            'controversies': controversies[:5],  # Top 5 controversies
+            'future_plans': future_plans[:5],  # Top 5 future plans
             'confidence_score': calculate_confidence_score(news_data, sentiment_analysis)
         }
     }
@@ -230,6 +288,16 @@ def display_research_summary(research_data):
         print(f"\n🔴 Recent Negative News:")
         for article in news['negative_examples']:
             print(f"   • {article['title']}")
+    
+    if news.get('controversies'):
+        print(f"\n⚠️ Recent Controversies:")
+        for item in news['controversies']:
+            print(f"   • {item['title']}")
+    
+    if news.get('future_plans'):
+        print(f"\n🔮 Future Plans/Announcements:")
+        for item in news['future_plans']:
+            print(f"   • {item['title']}")
 
 if __name__ == "__main__":
     company, email = get_inputs()
@@ -244,8 +312,12 @@ if __name__ == "__main__":
         # Analyze the sentiment
         sentiment = analyze_news_sentiment(news_data)
         
+        # Detect controversies and future plans
+        controversies = detect_controversies(news_data)
+        future_plans = extract_future_plans(news_data)
+        
         # Structure the data
-        research_results = structure_research_data(company, email, news_data, sentiment)
+        research_results = structure_research_data(company, email, news_data, sentiment, controversies, future_plans)
         
         # Display summary
         display_research_summary(research_results)

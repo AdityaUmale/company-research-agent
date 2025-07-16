@@ -1,0 +1,548 @@
+{
+  "research_data": {
+    "overview": {
+      "confidence": 0.82,
+      "data": {
+        "name": "microsoft",
+        "description": "Engineers like Anton Mirhorodchenko are tackling accessibility issues in unprecedented ways. The Billie Jean King Cup by Gainbridge is serving up better women's tennis stats with tech. At Microsoft you can live your purpose every day. With our scale and reach, your personal impact becomes part of a collective force for global progress.",
+        "founded": "1975",
+        "founders": [
+          "Bill Gates",
+          "Paul Allen to develop",
+          "sell BASIC interpreters for the Altair 8800"
+        ],
+        "ownership": null,
+        "headquarters": "Redmond,  Washington",
+        "history": [
+          {
+            "year": "1975",
+            "event": ", the company became influential in the rise of personal computers through software like Windows, and the company has since expanded to Internet services, cloud computing, video gaming and other fields"
+          },
+          {
+            "year": "1980",
+            "event": "s, followed by Windows"
+          }
+        ],
+        "employee_count": 234239,
+        "office_locations": [],
+        "sources": [
+          {
+            "type": "Official Website",
+            "title": "About Page",
+            "url": "https://www.microsoft.com/about"
+          },
+          {
+            "type": "LinkedIn",
+            "title": "Company Page",
+            "url": "https://www.linkedin.com/company/microsoft"
+          },
+          {
+            "type": "Wikipedia",
+            "title": "Microsoft",
+            "url": "https://en.wikipedia.org/wiki/Microsoft"
+          }
+        ],
+        "confidence_score": 1.0
+      }
+    },
+    "financials": {
+      "confidence": 1.0,
+      "data": {
+        "status": "success",
+        "data_type": "public_company",
+        "financial_data": {
+          "company_name": "Microsoft Corporation",
+          "ticker": "MSFT",
+          "exchange": "NMS",
+          "currency": "USD",
+          "market_cap": 3758040809472,
+          "enterprise_value": 3722422517760,
+          "revenue_ttm": 270010007552,
+          "revenue_growth": 0.133,
+          "gross_profit": 186509000704,
+          "operating_income": 130710003712,
+          "net_income": 96635002880,
+          "eps": 12.95,
+          "pe_ratio": 39.044014,
+          "price_to_book": 11.677136,
+          "debt_to_equity": 32.626,
+          "current_ratio": 1.372,
+          "roa": 0.14581999,
+          "roe": 0.3361,
+          "profit_margin": 0.35789,
+          "operating_margin": 0.45671,
+          "dividend_yield": 0.67,
+          "beta": 1.026,
+          "fifty_two_week_high": 508.3,
+          "fifty_two_week_low": 344.79,
+          "current_price": 505.62,
+          "target_price": 522.2628,
+          "recommendation": 1.43333,
+          "shares_outstanding": 7432540160,
+          "float_shares": 7422063978,
+          "employees": 228000,
+          "sector": "Technology",
+          "industry": "Software - Infrastructure",
+          "last_updated": "2025-07-17 02:10:01",
+          "price_change_52w": 46.645784390498555,
+          "market_cap_formatted": "$3.76T",
+          "enterprise_value_formatted": "$3.72T",
+          "revenue_ttm_formatted": "$270.01B",
+          "gross_profit_formatted": "$186.51B",
+          "operating_income_formatted": "$130.71B",
+          "net_income_formatted": "$96.64B",
+          "current_price_formatted": "$505.62",
+          "target_price_formatted": "$522.26",
+          "fifty_two_week_high_formatted": "$508.30",
+          "fifty_two_week_low_formatted": "$344.79",
+          "shares_outstanding_formatted": "$7.43B",
+          "float_shares_formatted": "$7.42B"
+        },
+        "confidence_score": 0.9,
+        "sources": [
+          {
+            "type": "Yahoo Finance",
+            "url": "https://finance.yahoo.com/quote/MSFT",
+            "data_points": "Stock price, financial ratios, company info"
+          }
+        ]
+      }
+    },
+    "social_media": {
+      "confidence": 0.57,
+      "data": {
+        "linkedin": {
+          "url": "https://www.linkedin.com/company/microsoft",
+          "followers": "25,865,970 followers",
+          "employees": "234,236 employees",
+          "description": null,
+          "industry": null,
+          "found": true
+        },
+        "twitter": {},
+        "instagram": {},
+        "facebook": {},
+        "youtube": {
+          "url": "https://www.youtube.com/@microsoft",
+          "subscribers": "216K",
+          "videos": null,
+          "found": true
+        },
+        "confidence_score": 0.5,
+        "sources": [
+          {
+            "platform": "LinkedIn",
+            "url": "https://www.linkedin.com/company/microsoft",
+            "method": "requests",
+            "status": "success"
+          },
+          {
+            "platform": "YouTube",
+            "url": "https://www.youtube.com/@microsoft",
+            "method": "requests",
+            "status": "success"
+          }
+        ]
+      }
+    },
+    "competitors": {
+      "confidence": 1.0,
+      "data": [
+        {
+          "name": "Office 365",
+          "domain": "office.com",
+          "employees_min": 201,
+          "employees_max": 500,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 1294309995.1638074,
+          "hq_city": "Redmond",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=office.com&t=2&s=1&h=c320c9bba8706c784b863ecf11b87fe62249f94477c3fc4a3787b119bc4d9db9"
+        },
+        {
+          "name": "GitHub",
+          "domain": "github.com",
+          "employees_min": 501,
+          "employees_max": 1000,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 481539177.14985013,
+          "hq_city": "San Francisco",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=github.com&t=2&s=1&h=6525c30f1af9ea5ee8912788b611744e1debcba39a2d0dd3d410b2916169883b"
+        },
+        {
+          "name": "Stack Overflow",
+          "domain": "stackoverflow.com",
+          "employees_min": 201,
+          "employees_max": 500,
+          "revenue_min": 50000000,
+          "revenue_max": 75000000,
+          "total_visits": 69881076.0507909,
+          "hq_city": "New York City",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=stackoverflow.com&t=2&s=1&h=04179ebf8566da481b023bba12856a0748752b1e4a75d1b145220282ef93f21c"
+        },
+        {
+          "name": "Chat Gpt",
+          "domain": "chatgpt.com",
+          "employees_min": 51,
+          "employees_max": 200,
+          "revenue_min": null,
+          "revenue_max": null,
+          "total_visits": 5395125236,
+          "hq_city": "N/A",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=chatgpt.com&t=2&s=1&h=a31616ae3cdef12fcfc664127563e6092e7531e7b4c3cde7e0c8c5fd3310dfc0"
+        },
+        {
+          "name": "Adobe",
+          "domain": "adobe.com",
+          "employees_min": 10001,
+          "employees_max": null,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 308172268.3555416,
+          "hq_city": "San Jose",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=adobe.com&t=2&s=1&h=0343bf8cd29cf34d2087739e2dea12192318f7a5331a9cca4e05c7bbf8a1741f"
+        },
+        {
+          "name": "Bing",
+          "domain": "bing.com",
+          "employees_min": 1001,
+          "employees_max": 5000,
+          "revenue_min": 1000000000,
+          "revenue_max": null,
+          "total_visits": 1363194512.788903,
+          "hq_city": "Redmond",
+          "hq_country": "US",
+          "icon": "https://site-images.similarcdn.com/image?url=bing.com&t=2&s=1&h=a37ae326ae78ba2da30e9c8da030e84e07d4c76c5452c239f85c9050781ffde8"
+        }
+      ]
+    },
+    "customers": {
+      "confidence": 0.8,
+      "data": [
+        {
+          "name": "Data For Microsoft Customers We",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: Discover Actionable Data For Microsoft Customers We use proprietary technology to track and curate a...",
+          "source": "Web search"
+        },
+        {
+          "name": "nsive database of companies who",
+          "relationship_type": "Client/Customer",
+          "industry": "Unknown",
+          "description": "Mentioned in context: Discover Actionable Data For Microsoft Customers We use proprietary technology to track and curate a...",
+          "source": "Web search"
+        }
+      ]
+    },
+    "job_listings": {
+      "confidence": 0.8,
+      "data": [
+        {
+          "title": "Air Force Sales Leader",
+          "location": "Washington",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.theladders.com/job/air-force-sales-leader-microsoft-washington-dc_79541500?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Senior Software Engineer - CTJ -POLY",
+          "location": "Reston",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.ziprecruiter.com/c/Microsoft/Job/Senior-Software-Engineer-CTJ-Poly/-in-Reston,VA?jid=c582818b50d098e6&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Cloud Solution Architecture - CTJ - Top Secret",
+          "location": "Reston",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.theladders.com/job/cloud-solution-architecture-ctj-top-secret-microsoft-reston-va_78569945?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Critical Environment Energy Marshall",
+          "location": "Dulles",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.theladders.com/job/critical-environment-energy-marshall-microsoft-dulles-va_80916455?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Microsoft SQL DBaaS Engineer - TS/SCI",
+          "location": "Annapolis",
+          "source": "JSearchAPI",
+          "company": "General Dynamics Information Technology, Inc.",
+          "url": "https://www.ziprecruiter.com/c/General-Dynamics-Information-Technology,-Inc./Job/Microsoft-SQL-DBaaS-Engineer-TS-SCI/-in-Annapolis,MD?jid=51cbdad250573b2f&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Partner Technology Strategist Manager",
+          "location": "Springfield",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.linkedin.com/jobs/view/partner-technology-strategist-manager-at-microsoft-4267645335?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Microsoft Teams Customer Engineer",
+          "location": "US",
+          "source": "JSearchAPI",
+          "company": "JDA TSG",
+          "url": "https://www.indeed.com/viewjob?jk=ee6d9fa559142af2&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Real Estate Portfolio Performance Manager",
+          "location": "Redmond",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.theladders.com/job/real-estate-portfolio-performance-manager-microsoft-redmond-wa_78445741?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Alation  Microsoft fabric Administrator",
+          "location": "Raritan",
+          "source": "JSearchAPI",
+          "company": "LTIMindtree",
+          "url": "https://www.linkedin.com/jobs/view/alation-microsoft-fabric-administrator-at-ltimindtree-4265449301?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        },
+        {
+          "title": "Business Administrator-Office Shared Services Experience",
+          "location": "Redmond",
+          "source": "JSearchAPI",
+          "company": "Microsoft",
+          "url": "https://www.ziprecruiter.com/c/Microsoft/Job/Business-Administrator-Office-Shared-Services-Experience/-in-Redmond,WA?jid=beaa9b65b19592dd&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+          "job_type": "Full-time"
+        }
+      ]
+    },
+    "news": {
+      "confidence": 1.0,
+      "data": {
+        "company_name": "microsoft",
+        "contact_email": "your_email@example.com",
+        "research_date": "2025-07-17 02:10:02",
+        "news_research": {
+          "total_articles_found": 10249,
+          "articles_analyzed": 20,
+          "sentiment_summary": {
+            "positive": 6,
+            "negative": 4,
+            "neutral": 10,
+            "total": 20
+          },
+          "key_articles": [
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Tom Warren",
+              "title": "Microsoft will halt new Office features for Windows 10 in 2026",
+              "description": "Microsoft has quietly revealed that it will stop adding new features to Office apps (Microsoft 365) for Windows 10 users in August 2026. While security updates will remain in place for Office apps running on Windows 10 until October 2028, Microsoft will cut o…",
+              "url": "https://www.theverge.com/news/706586/microsoft-365-office-app-features-windows-10-end-of-life-2026",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STKB334_MICROSOFT_OFFICE_A.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+              "publishedAt": "2025-07-14T12:37:39Z",
+              "content": "Youll have to upgrade to Windows 11 if you want the latest Microsoft 365 app improvements.\r\nMicrosoft has quietly revealed that it will stop adding new features to Office apps (Microsoft 365) for Win… [+1398 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Tom Warren",
+              "title": "Microsoft Teams now has threaded conversations",
+              "description": "Microsoft has added threaded conversations to its Teams communications app this week. After promising to launch the highly-requested feature in mid-2025, Microsoft is now releasing a public preview of threaded conversations for Teams users to enable. The Micr…",
+              "url": "https://www.theverge.com/news/700917/microsoft-teams-threads-conversations-emoji",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25357653/STK264_MICROSOFT_TEAMS_V2_CVIRGINIA_D.png?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+              "publishedAt": "2025-07-08T16:04:32Z",
+              "content": "The new threads feature in Teams is available in public preview, alongside improved emoji reactions.\r\nMicrosoft has added threaded conversations to its Teams communications app this week. After promi… [+1549 chars]"
+            },
+            {
+              "source": {
+                "id": "wired",
+                "name": "Wired"
+              },
+              "author": "Kylie Robison",
+              "title": "OpenAI’s Unreleased AGI Paper Could Complicate Microsoft Negotiations",
+              "description": "The partnership between OpenAI and Microsoft in many ways hinges on the definition of artificial general intelligence, creating a tension that has spilled over into OpenAI research that has not been made public.",
+              "url": "https://www.wired.com/story/openai-five-levels-agi-paper-microsoft-negotiations/",
+              "urlToImage": "https://media.wired.com/photos/6837480c7f38ebcc93957426/191:100/w_1280,c_limit/AI-Labs-Promote-Bottom-Line-Business-2213399161.jpg",
+              "publishedAt": "2025-06-27T19:35:29Z",
+              "content": "A small clause inside OpenAIs contract with Microsoft, once considered a distant hypothetical, has now become a flashpoint in one of the biggest partnerships in tech.\r\nThe clause states that if OpenA… [+3289 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Tom Warren",
+              "title": "Microsoft should change its Copilot advertising, says watchdog",
+              "description": "Microsoft’s Copilot advertising has been criticized by an industry watchdog for its productivity claims and confusing use of Copilot branding. The Better Business Bureau’s National Advertising Division (NAD) has reviewed Microsoft’s Copilot advertising, and r…",
+              "url": "https://www.theverge.com/news/688056/microsoft-copilot-advertising-watchdog-response",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK259_MICROSOFT_COPILOT_3__D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+              "publishedAt": "2025-06-17T11:26:56Z",
+              "content": "An advertising watchdog has recommended that Microsoft discontinue or modify some of its Copilot claims.\r\nMicrosofts Copilot advertising has been criticized by an industry watchdog for its productivi… [+2394 chars]"
+            },
+            {
+              "source": {
+                "id": "the-verge",
+                "name": "The Verge"
+              },
+              "author": "Tom Warren",
+              "title": "Microsoft is laying off as many as 9,000 employees",
+              "description": "Microsoft confirmed that it’s laying off as many as 9,100 employees, or about four percent of its workforce, in yet another round of cuts this year, reports the Seattle Times. Employees in Microsoft’s Xbox division, known as Microsoft Gaming, are being hit ha…",
+              "url": "https://www.theverge.com/news/693535/microsoft-layoffs-july-2025-xbox",
+              "urlToImage": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25832915/STK095_MICROSOFT_2_CVirginia_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+              "publishedAt": "2025-07-02T13:21:37Z",
+              "content": "Microsofts latest job cuts come after multiple rounds of layoffs over the past year.\r\nMicrosoft confirmed that its laying off as many as 9,100 employees, or about four percent of its workforce, in ye… [+3529 chars]"
+            }
+          ],
+          "positive_examples": [
+            {
+              "title": "Microsoft will halt new Office features for Windows 10 in 2026",
+              "sentiment": "positive",
+              "url": "https://www.theverge.com/news/706586/microsoft-365-office-app-features-windows-10-end-of-life-2026",
+              "source": "The Verge",
+              "published": "2025-07-14T12:37:39Z",
+              "keywords": [
+                "win"
+              ]
+            },
+            {
+              "title": "Microsoft Teams now has threaded conversations",
+              "sentiment": "positive",
+              "url": "https://www.theverge.com/news/700917/microsoft-teams-threads-conversations-emoji",
+              "source": "The Verge",
+              "published": "2025-07-08T16:04:32Z",
+              "keywords": [
+                "launch"
+              ]
+            },
+            {
+              "title": "Windows 11 has finally overtaken Windows 10 as the most used desktop OS",
+              "sentiment": "positive",
+              "url": "https://www.theverge.com/news/699161/microsoft-windows-11-usage-milestone-windows-10",
+              "source": "The Verge",
+              "published": "2025-07-07T10:39:01Z",
+              "keywords": [
+                "win"
+              ]
+            }
+          ],
+          "negative_examples": [
+            {
+              "title": "Phil Spencer isn’t retiring as the chief of Xbox ‘anytime soon’",
+              "sentiment": "negative",
+              "url": "https://www.theverge.com/news/696922/phil-spencer-xbox-microsoft-gaming-retiring",
+              "source": "The Verge",
+              "published": "2025-07-02T19:40:27Z",
+              "keywords": [
+                "low"
+              ]
+            },
+            {
+              "title": "Microsoft Just Fired About 9,000 People While Making Billions",
+              "sentiment": "negative",
+              "url": "https://gizmodo.com/microsoft-just-fired-about-9000-people-while-making-billions-2000623667",
+              "source": "Gizmodo.com",
+              "published": "2025-07-03T00:54:49Z",
+              "keywords": [
+                "fired"
+              ]
+            },
+            {
+              "title": "The Xbox 360 dashboard just got updated… to advertise newer Xboxes",
+              "sentiment": "negative",
+              "url": "https://www.theverge.com/news/693631/microsoft-xbox-360-dashboard-software-update-ads",
+              "source": "The Verge",
+              "published": "2025-06-26T18:40:34Z",
+              "keywords": [
+                "issue"
+              ]
+            }
+          ],
+          "controversies": [
+            {
+              "title": "Microsoft should change its Copilot advertising, says watchdog",
+              "url": "https://www.theverge.com/news/688056/microsoft-copilot-advertising-watchdog-response",
+              "source": "The Verge",
+              "published": "2025-06-17T11:26:56Z",
+              "keywords": [
+                "criticized"
+              ]
+            }
+          ],
+          "future_plans": [
+            {
+              "title": "A week in Xbox VR with Microsoft and Meta’s new $399 headset",
+              "url": "https://www.theverge.com/hands-on/690978/meta-quest-3s-xbox-edition-vr-headset-release-date-pricing",
+              "source": "The Verge",
+              "published": "2025-06-24T13:02:05Z",
+              "keywords": [
+                "announced"
+              ]
+            },
+            {
+              "title": "Activision pulls Call of Duty game after PC players are hacked",
+              "url": "https://www.theverge.com/news/702255/call-of-duty-wwii-pc-game-pass-hacking-activision",
+              "source": "The Verge",
+              "published": "2025-07-09T09:31:48Z",
+              "keywords": [
+                "announced"
+              ]
+            }
+          ],
+          "confidence_score": 0.9999999999999999
+        }
+      }
+    },
+    "news_analysis": {
+      "sentiment_score": 0.0,
+      "controversy_level": "LOW",
+      "key_themes": [],
+      "recruiter_concerns": []
+    },
+    "glassdoor_analysis": {
+      "overall_sentiment": "POSITIVE",
+      "top_pros": [
+        "Strong focus on technology and innovation, especially with the Microsoft stack.",
+        "Competitive benefits package, particularly valuable for families.",
+        "Job stability and financial security due to the company's strong cash flow."
+      ],
+      "top_cons": [
+        "Brand recognition may not be as strong for smaller, more agile companies.",
+        "Difficult to stand out and advance in a large organization with 90,000 employees.",
+        "Limited support from management for career advancement."
+      ],
+      "recruiter_notes": [
+        "Highlight the company's strong technology focus to attract tech-savvy candidates.",
+        "Emphasize the stability and benefits offered, which may appeal to candidates seeking job security.",
+        "Be transparent about the challenges of career advancement and the competitive nature of the workplace."
+      ]
+    }
+  },
+  "final_analysis": {
+    "executive_summary": "Microsoft, founded in 1975 and headquartered in Redmond, Washington, is a leading technology company with a substantial workforce of over 234,000 employees. Despite the lack of specific revenue data, the company's stability is underscored by its long-standing presence and competitive position in the industry. Current job listings indicate ongoing recruitment efforts, suggesting growth potential. However, neutral sentiment from Glassdoor and news sources suggests a balanced view of the company's culture and work environment.",
+    "key_insights": [
+      "Microsoft's long history and large employee base indicate strong company stability.",
+      "The neutral sentiment from Glassdoor suggests a balanced work culture, which may appeal to candidates seeking a stable environment.",
+      "The presence of 10 job listings highlights active recruitment, pointing to growth opportunities within the company.",
+      "With six competitors, Microsoft operates in a competitive market, which may drive innovation and career development opportunities.",
+      "The lack of specific revenue data limits a full financial assessment, but the company's established market position suggests financial robustness."
+    ],
+    "missing_data_assessment": "The critical missing data is the specific revenue figures, which are essential for a comprehensive financial analysis and understanding of the company's economic health.",
+    "confidence_rationale": "The confidence score of 0.82 for the overview reflects a high level of certainty in the company's foundational data, such as its founding year and employee count. The perfect confidence score of 1.0 for financials, despite the absence of revenue data, suggests reliance on the company's established market reputation rather than specific financial metrics."
+  },
+  "token_usage": 1659
+}

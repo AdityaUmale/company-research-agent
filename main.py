@@ -313,20 +313,30 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             f.write(f"- **Description:** {overview_data.get('description', 'Not available')}\n")
             f.write(f"- **Founded:** {overview_data.get('founded', 'Not available')}\n")
             
-            # Founders (list or string, with fallback to history)
+            # Founders (list or string, with enhanced fallback to history)
             founders = overview_data.get('founders')
             if not founders:
                 # Try to extract from history
                 history = overview_data.get('history', [])
-                if isinstance(history, list):
+                if isinstance(history, list) and history:
                     for event in history:
                         event_text = str(event.get('event', ''))
+                        # Look for 'founded by' or any 'by ...' phrase
+                        founders_match = None
                         if 'founded by' in event_text.lower():
-                            # Try to extract founders from the event text
                             after_by = event_text.lower().split('founded by', 1)[-1].strip()
-                            # Remove year or extra text
                             after_by = after_by.split(' in ')[0].split(',')[0].strip()
-                            founders = [after_by.title()]
+                            founders_match = after_by
+                        elif 'by' in event_text.lower():
+                            # Try to extract after 'by'
+                            after_by = event_text.split('by', 1)[-1].strip()
+                            # Remove leading commas or spaces
+                            after_by = after_by.lstrip(', ').split(' in ')[0].split(',')[0].strip()
+                            founders_match = after_by
+                        if founders_match:
+                            # Split on 'and', '&', or ','
+                            names = [n.strip().title() for n in re.split(r' and | & |,', founders_match) if n.strip()]
+                            founders = names
                             break
             if isinstance(founders, list):
                 f.write(f"- **Founders:** {', '.join(founders)}\n")
@@ -335,33 +345,57 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             else:
                 f.write(f"- **Founders:** Not available\n")
 
-            # Headquarters (with fallback to history)
+            # Headquarters (with enhanced fallback)
             headquarters = overview_data.get('headquarters')
             if not headquarters:
                 history = overview_data.get('history', [])
+                # Try to extract from history events
                 if isinstance(history, list):
                     for event in history:
                         event_text = str(event.get('event', ''))
-                        for kw in ['headquarters', 'based in', 'located in']:
+                        for kw in ['headquarters', 'based in', 'located in', 'in']:
                             if kw in event_text.lower():
                                 # Extract location after keyword
                                 after_kw = event_text.lower().split(kw, 1)[-1].strip()
+                                # Remove trailing punctuation
                                 after_kw = after_kw.split('.')[0].split(',')[0].strip()
-                                headquarters = after_kw.title()
-                                break
+                                if after_kw:
+                                    headquarters = after_kw.title()
+                                    break
                         if headquarters:
                             break
+            # Try to extract from description if still not found
+            if not headquarters:
+                desc = overview_data.get('description', '')
+                match = re.search(r'in ([A-Z][a-zA-Z\s,]+)', desc)
+                if match:
+                    headquarters = match.group(1).strip()
             f.write(f"- **Headquarters:** {headquarters if headquarters else 'Not available'}\n")
 
             f.write(f"- **Ownership:** {overview_data.get('ownership', 'Not available')}\n")
 
-            # Employee count (with fallback to financials)
+            # Employee count (with enhanced fallback)
             employee_count = overview_data.get('employee_count')
             if not employee_count:
                 employee_count = financials.get('employee_count')
+            # Try to extract from description or history if still not found
+            if not employee_count:
+                desc = overview_data.get('description', '')
+                match = re.search(r'(\d{1,3}(?:,\d{3})+)', desc)
+                if match:
+                    employee_count = match.group(1)
+            if not employee_count:
+                history = overview_data.get('history', [])
+                if isinstance(history, list):
+                    for event in history:
+                        event_text = str(event.get('event', ''))
+                        match = re.search(r'(\d{1,3}(?:,\d{3})+)', event_text)
+                        if match:
+                            employee_count = match.group(1)
+                            break
             if employee_count:
                 try:
-                    employee_count_str = f"{int(employee_count):,}"
+                    employee_count_str = f"{int(employee_count.replace(',', '')):,}"
                 except Exception:
                     employee_count_str = str(employee_count)
                 f.write(f"- **Employee Count:** {employee_count_str}\n")
@@ -590,11 +624,6 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
                     if job.get('url'):
                         f.write(f"  - URL: [{job.get('url')}]({job.get('url')})\n")
             f.write("\n")
-            
-            # Analysis Summary
-            f.write("## Analysis Summary\n\n")
-            f.write(f"**Missing Data Assessment:** {analysis.missing_data_assessment}\n\n")
-            f.write(f"**Confidence Rationale:** {analysis.confidence_rationale}\n\n")
             
             f.write("---\n")
             f.write(f"*Report generated with {self.total_tokens} tokens*\n")

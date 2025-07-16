@@ -109,13 +109,33 @@ class TokenOptimizedResearcher:
             return 0.3
 
     def analyze_news_efficiently(self, news_data: Dict) -> NewsAnalysis:
-        """Analyze news data with single optimized LLM call"""
+        """Analyze news data with single optimized LLM call, with fallback to sentiment_summary and controversies if needed."""
         if not news_data or not news_data.get('key_articles'):
+            # Fallback: try to use sentiment_summary and controversies
+            sentiment_score = 0.0
+            controversy_level = "LOW"
+            key_themes = []
+            recruiter_concerns = []
+            # Fallback for sentiment
+            sentiment_summary = news_data.get('sentiment_summary', {})
+            if sentiment_summary:
+                pos = sentiment_summary.get('positive', 0)
+                neg = sentiment_summary.get('negative', 0)
+                total = sentiment_summary.get('total', 0)
+                if total > 0:
+                    sentiment_score = round((pos - neg) / total, 2)
+            # Fallback for controversy
+            controversies = news_data.get('controversies', [])
+            if controversies:
+                if len(controversies) > 3:
+                    controversy_level = "HIGH"
+                else:
+                    controversy_level = "MEDIUM"
             return NewsAnalysis(
-                sentiment_score=0.0,
-                controversy_level="LOW",
-                key_themes=[],
-                recruiter_concerns=[]
+                sentiment_score=sentiment_score,
+                controversy_level=controversy_level,
+                key_themes=key_themes,
+                recruiter_concerns=recruiter_concerns
             )
         
         # Truncate data to save tokens
@@ -288,39 +308,85 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             f.write(f"**Confidence Score:** {overview.get('confidence', 0)}\n\n")
             
             overview_data = overview.get('data', {})
+            financials = research_data.get('financials', {}).get('data', {})
             f.write(f"- **Name:** {company_name}\n")
             f.write(f"- **Description:** {overview_data.get('description', 'Not available')}\n")
             f.write(f"- **Founded:** {overview_data.get('founded', 'Not available')}\n")
             
-            # Founders (list or string)
-            founders = overview_data.get('founders', 'Not available')
+            # Founders (list or string, with fallback to history)
+            founders = overview_data.get('founders')
+            if not founders:
+                # Try to extract from history
+                history = overview_data.get('history', [])
+                if isinstance(history, list):
+                    for event in history:
+                        event_text = str(event.get('event', ''))
+                        if 'founded by' in event_text.lower():
+                            # Try to extract founders from the event text
+                            after_by = event_text.lower().split('founded by', 1)[-1].strip()
+                            # Remove year or extra text
+                            after_by = after_by.split(' in ')[0].split(',')[0].strip()
+                            founders = [after_by.title()]
+                            break
             if isinstance(founders, list):
-                f.write(f"- **Founders:** {', '.join(founders) if founders else 'Not available'}\n")
-            else:
+                f.write(f"- **Founders:** {', '.join(founders)}\n")
+            elif founders:
                 f.write(f"- **Founders:** {founders}\n")
-            
-            f.write(f"- **Ownership:** {overview_data.get('ownership', 'Not available')}\n")
-            f.write(f"- **Headquarters:** {overview_data.get('headquarters', 'Not available')}\n")
-            
-            # History (list of dicts)
-            history = overview_data.get('history', [])
-            if isinstance(history, list) and history:
-                f.write(f"- **History:**\n")
-                for event in history:
-                    year = event.get('year', '')
-                    desc = event.get('event', '')
-                    f.write(f"  - {year}: {desc}\n")
             else:
-                f.write(f"- **History:** Not available\n")
-            
-            f.write(f"- **Employee Count:** {overview_data.get('employee_count', 'Not available')}\n")
-            
-            # Office Locations (list)
+                f.write(f"- **Founders:** Not available\n")
+
+            # Headquarters (with fallback to history)
+            headquarters = overview_data.get('headquarters')
+            if not headquarters:
+                history = overview_data.get('history', [])
+                if isinstance(history, list):
+                    for event in history:
+                        event_text = str(event.get('event', ''))
+                        for kw in ['headquarters', 'based in', 'located in']:
+                            if kw in event_text.lower():
+                                # Extract location after keyword
+                                after_kw = event_text.lower().split(kw, 1)[-1].strip()
+                                after_kw = after_kw.split('.')[0].split(',')[0].strip()
+                                headquarters = after_kw.title()
+                                break
+                        if headquarters:
+                            break
+            f.write(f"- **Headquarters:** {headquarters if headquarters else 'Not available'}\n")
+
+            f.write(f"- **Ownership:** {overview_data.get('ownership', 'Not available')}\n")
+
+            # Employee count (with fallback to financials)
+            employee_count = overview_data.get('employee_count')
+            if not employee_count:
+                employee_count = financials.get('employee_count')
+            if employee_count:
+                try:
+                    employee_count_str = f"{int(employee_count):,}"
+                except Exception:
+                    employee_count_str = str(employee_count)
+                f.write(f"- **Employee Count:** {employee_count_str}\n")
+            else:
+                f.write(f"- **Employee Count:** Not available\n")
+
+            # Office Locations
             office_locations = overview_data.get('office_locations', [])
-            if isinstance(office_locations, list) and office_locations:
+            if office_locations:
                 f.write(f"- **Office Locations:** {', '.join(office_locations)}\n")
             else:
                 f.write(f"- **Office Locations:** Not available\n")
+
+            # History (as a bulleted list)
+            history = overview_data.get('history', [])
+            if history:
+                f.write(f"\n**History:**\n")
+                for event in history:
+                    year = event.get('year', '')
+                    event_text = event.get('event', '')
+                    if year and event_text:
+                        f.write(f"- {year}: {event_text}\n")
+                    elif event_text:
+                        f.write(f"- {event_text}\n")
+            f.write("\n")
             print("[DEBUG] Wrote company overview")
             
             # Financial Snapshot
@@ -348,14 +414,37 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             print("[DEBUG] Wrote financial snapshot")
             
             # News Analysis
-            news_analysis = research_data.get('news_analysis')
+            news_analysis = research_data.get('news_analysis') or {}
             news_data = research_data.get('news', {}).get('data', {}).get('news_research', {})
             print(f"[DEBUG] News data for report: {news_data}")
             if news_analysis or news_data:
                 f.write(f"## Recent News & Sentiment Analysis\n")
-                if news_analysis:
-                    f.write(f"**Sentiment Score:** {news_analysis.get('sentiment_score', 'N/A')}\n")
-                    f.write(f"**Controversy Level:** {news_analysis.get('controversy_level', 'N/A')}\n\n")
+                # Sentiment Score fallback
+                sentiment_score = news_analysis.get('sentiment_score', None)
+                if (sentiment_score is None or sentiment_score == 0.0) and news_data.get('sentiment_summary'):
+                    ss = news_data['sentiment_summary']
+                    pos = ss.get('positive', 0)
+                    neg = ss.get('negative', 0)
+                    total = ss.get('total', 0)
+                    if total > 0:
+                        sentiment_score = round((pos - neg) / total, 2)
+                if sentiment_score is not None:
+                    f.write(f"**Sentiment Score:** {sentiment_score}\n")
+                else:
+                    f.write(f"**Sentiment Score:** N/A\n")
+                # Controversy Level fallback
+                controversy_level = news_analysis.get('controversy_level', None)
+                if (not controversy_level or controversy_level == 'LOW') and news_data.get('controversies'):
+                    if len(news_data['controversies']) > 3:
+                        controversy_level = 'HIGH'
+                    elif len(news_data['controversies']) > 0:
+                        controversy_level = 'MEDIUM'
+                    else:
+                        controversy_level = 'LOW'
+                if controversy_level:
+                    f.write(f"**Controversy Level:** {controversy_level}\n\n")
+                else:
+                    f.write(f"**Controversy Level:** N/A\n\n")
                     f.write("### Key Themes\n")
                     for theme in news_analysis.get('key_themes', []):
                         f.write(f"- {theme}\n")
@@ -409,19 +498,61 @@ Focus on: recruitment viability, company stability, cultural fit, growth potenti
             
             # Competitors
             competitors = research_data.get('competitors', {})
+            import json
+            print("[DEBUG] Competitor data for report:", json.dumps(competitors, indent=2))
             f.write(f"## Direct Competitors\n")
             f.write(f"**Confidence Score:** {competitors.get('confidence', 0)}\n\n")
             
+            def human_readable_number(n):
+                if n is None:
+                    return 'N/A'
+                if n >= 1_000_000_000:
+                    return f"{n/1_000_000_000:.1f}B"
+                elif n >= 1_000_000:
+                    return f"{n/1_000_000:.1f}M"
+                elif n >= 1_000:
+                    return f"{n/1_000:.1f}K"
+                return str(n)
+
             for competitor in competitors.get('data', []):
                 if isinstance(competitor, dict):
                     f.write(f"- **{competitor.get('name', 'Unknown')}**\n")
                     f.write(f"  - Domain: {competitor.get('domain', 'N/A')}\n")
-                    f.write(f"  - Employees: {competitor.get('employees', 'N/A')}\n")
-                    f.write(f"  - Revenue: {competitor.get('revenue', 'N/A')}\n")
-                    f.write(f"  - Visits: {competitor.get('visits', 'N/A')}\n")
-                    f.write(f"  - HQ: {competitor.get('hq', 'N/A')}\n")
+                    # Employees
+                    emp_min = competitor.get('employees_min')
+                    emp_max = competitor.get('employees_max')
+                    if emp_min and emp_max:
+                        f.write(f"  - Employees: {human_readable_number(emp_min)}–{human_readable_number(emp_max)}\n")
+                    elif emp_min:
+                        f.write(f"  - Employees: {human_readable_number(emp_min)}\n")
+                    else:
+                        f.write(f"  - Employees: N/A\n")
+                    # Revenue
+                    rev_min = competitor.get('revenue_min')
+                    rev_max = competitor.get('revenue_max')
+                    if rev_min and rev_max:
+                        f.write(f"  - Revenue: ${human_readable_number(rev_min)}–${human_readable_number(rev_max)}\n")
+                    elif rev_min:
+                        f.write(f"  - Revenue: ${human_readable_number(rev_min)}\n")
+                    else:
+                        f.write(f"  - Revenue: N/A\n")
+                    # Visits
+                    visits = competitor.get('total_visits')
+                    f.write(f"  - Visits: {human_readable_number(visits)}\n")
+                    # HQ
+                    hq_city = competitor.get('hq_city')
+                    hq_country = competitor.get('hq_country')
+                    if hq_city and hq_country:
+                        f.write(f"  - HQ: {hq_city}, {hq_country}\n")
+                    elif hq_city:
+                        f.write(f"  - HQ: {hq_city}\n")
+                    elif hq_country:
+                        f.write(f"  - HQ: {hq_country}\n")
+                    else:
+                        f.write(f"  - HQ: N/A\n")
+                    # Icon
                     if competitor.get('icon'):
-                        f.write(f"  - Icon: ![]({competitor.get('icon')})\n")
+                        f.write(f"  - ![icon]({competitor['icon']})\n")
             f.write("\n")
             
             # Glassdoor Analysis

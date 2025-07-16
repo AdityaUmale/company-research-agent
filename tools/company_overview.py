@@ -7,6 +7,7 @@ from tools.website_scraper import session
 from tools.wikipedia_lookup import get_company_wikipedia_summary
 from tools.website_scraper import scrape_company_about
 import time
+from bs4 import BeautifulSoup
 
 def clean_description(raw_text):
     """Clean and deduplicate description text"""
@@ -122,7 +123,8 @@ def scrape_careers_page(base_url):
             
             if response.status_code == 200:
                 print(f"  ✅ Found careers page")
-                text = response.text
+                soup = BeautifulSoup(response.text, 'html.parser')
+                text = soup.get_text(separator=' ', strip=True)
                 
                 # Extract employee count
                 employee_count = extract_employee_count_from_text(text)
@@ -163,7 +165,8 @@ def scrape_about_page_for_headcount(base_url):
             
             if response.status_code == 200:
                 print(f"  ✅ Found about page")
-                text = response.text
+                soup = BeautifulSoup(response.text, 'html.parser')
+                text = soup.get_text(separator=' ', strip=True)
                 
                 # Extract employee count
                 employee_count = extract_employee_count_from_text(text)
